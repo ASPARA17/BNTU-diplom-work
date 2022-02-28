@@ -1,0 +1,133 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  border-bottom: 1px solid #6d6c6cce;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 30px -10px #000000;
+  padding: 0 15px;
+}
+
+
+
+.users{
+  width: 100%;
+}
+
+
+.header__name {
+  font-size: 18px;
+}
+
+.user img {
+  border: 4px solid #2185D0;
+  border-radius: 16px;
+  padding: 5px;
+  box-shadow: 0px 2px 9px 3px rgb(34 60 80 / 20%);
+  margin-left: 15px;
+}
+
+.wrapper{
+  width: 90vw;
+  padding: 20px;
+  box-shadow: 0px 2px 8px 0px rgba(34, 60, 80, 0.2);
+  margin: 10px auto;
+}
+
+
+.role, .user__actions {
+  display: flex;
+  flex-direction: column;
+  align-items:flex-start;
+  justify-content: center;
+}
+
+.button {
+  margin: 5px 2px;
+  outline: none;
+  border: 0;
+  background-color: #2185d0;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 6px 8px;
+  width: 150px;
+  min-height: 35px;
+  height: fit-content;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.user__delete {
+  background-color: #e21515;
+}
+
+.user__confirm {
+  background-color: #3dcc19;
+}
+
+.role__current {
+  background-color: #3dcc19;
+}
+
+input {
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, .87);
+  padding: 0 10px;
+  width: 230px;
+  height: 35px;
+  font-size: 15px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.modal-body{
+  display: flex;
+  flex-direction: column;
+  }
+
+  label{
+    margin-top: 10px;
+  }
+
+  .ng-select{
+    width:250px;
+  }
+
+  .wrapper{
+    width: 90vw;
+    padding: 20px;
+    box-shadow: 0px 2px 8px 0px rgba(34, 60, 80, 0.2);
+    margin: 10px auto;
+  }
+
+  .wrapper__button{
+    width: 90vw;
+    padding: 20px;
+    margin: 10px auto;
+  }
+
+
+.addButton{
+  padding: 10px;
+  text-align: right;
+}
+
+  .add_button{
+    border-radius: 5px;
+    padding: 6px 8px;
+    width: 45px;
+    font-size: 16px;
+  }
+
+
+
+
+

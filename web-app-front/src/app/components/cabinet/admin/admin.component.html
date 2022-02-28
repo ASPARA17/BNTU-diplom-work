@@ -1,0 +1,388 @@
+<header>
+  <img src="../../../../../assets/icons/unnamed.jpg" width="70">
+  <div class="user">
+    <span class="header__name">{{userName['user_first_name']}}</span>
+    <div ngbDropdown class="d-inline-block">
+      <img src="../../../../../assets/icons/user.png" width="55" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button ngbDropdownItem (click)="logoutUser()">
+          Выйти
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<div class="wrapper" *ngIf="isEditOpen; else other_content">
+  <ul ngbNav #nav="ngbNav" class="nav-tabs">
+    <li ngbNavItem>
+      <a ngbNavLink>Пользователи</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Фамилия</th>
+              <th scope="col">Имя</th>
+              <th scope="col">Отчество</th>
+              <th scope="col">Роли</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of listOfUsers" class="users__user user">
+              <td> {{user.user_second_name}}</td>
+              <td> {{user.user_first_name}}</td>
+              <td> {{user.user_middle_name}}</td>
+              <td>
+                <div class="user__role role">
+                  <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Роли</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button ngbDropdownItem *ngFor="let role of roles"
+                        [ngClass]="{'role__current': role.id === user.role_name}" value={{role.id}}
+                        (click)="updateRole(user.user_id,role.id)">
+                        <div *ngIf="role.id === user.role_name ; then thenBlock else elseBlock"></div>
+                        <ng-template #thenBlock>{{role.name}}</ng-template>
+                        <ng-template #elseBlock>{{role.name}}</ng-template>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </td>
+              <td>
+                <div class="user__actions">
+                  <button (click)="delete(user.user_id)" class="user__delete button">Удалить</button>
+                  <button *ngIf="!user.user_confirm" (click)="confirm(user.user_id)"
+                    class="user__confirm btn">Подтвердить</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Учебные года</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Начало года</th>
+              <th scope="col">Конец года</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let date of dates; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{date.year_start}}</td>
+              <td>{{date.year_end}}</td>
+              <td>
+                <div class="user__role role">
+                  <button class="user__delete button" (click)="deleteDate(date.year_id)">Удалить</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+        <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Добавить учебный год</button>
+
+
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Университеты</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Университет</th>
+              <th scope="col">Сокращенное название</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let university of universities; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{university.university_name_full}}</td>
+              <td>{{university.university_name}}</td>
+              <td>
+                <div class="user__actions">
+                  <button class="button" (click)="openEditUniversity(university.university_id); getFacultyAt();">Редактировать</button>
+                  <button class="user__delete button" (click)="deleteUniversity(university.university_id)">Удалить</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button class="btn btn-lg btn-outline-primary" (click)="open(addUniver)">Добавить</button>
+
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Факультеты</a>
+      <ng-template ngbNavContent>
+        <div>
+          <label for="institute">Выберите университет</label>
+          <ng-select   (change)="getFacultyByUniversity(universityId)"
+                      [(ngModel)]="universityId"
+                      [items] = " universities"
+                      bindLabel="university_name"
+                      bindValue="university_id"
+                      name="university"
+                      placeholder="Университет">
+          </ng-select>
+          <br>
+        </div>
+          <table class="users table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Факультет</th>
+                <th scope="col">Сокращенное название</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let faculty of facultyAtUniversity; let i = index">
+                <td>{{faculty.faculty_name}}</td>
+                <td>{{faculty.faculty_name_full}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        
+      </ng-template>
+    </li>
+    <li ngbNavItem>
+      <a ngbNavLink>Кафедры</a>
+      <ng-template ngbNavContent>
+        <div>
+          <label for="institute">Выберите университет</label>
+          <ng-select   (change)="getFacultyByUniversity(universityId)"
+                      [(ngModel)]="universityId"
+                      [items] = " universities"
+                      bindLabel="university_name"
+                      bindValue="university_id"
+                      name="university"
+                      placeholder="Университет">
+          </ng-select>
+          <br>
+        </div>
+        <div>
+          <label for="institute">Выберите факультет</label>
+          <ng-select  (change) = "getCathedra(facultyId)" 
+                    [(ngModel)]="facultyId"
+                    [items] = "facultyAtUniversity"
+                    bindLabel="faculty_name"
+                    bindValue="faculty_id"
+                    name="faculty"
+                    placeholder="Факультет">
+          </ng-select>
+          <br>
+        </div>
+          <table class="users table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Факультет</th>
+                <th scope="col">Кафедра</th>
+                <th scope="col">Аббревиатура</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cathedra of cathedraAll; let i = index">
+                <td>{{cathedra.faculty_name}}</td>
+                <td>{{cathedra.cathedra_name}}</td>
+                <td>{{cathedra.cathedra_name_full}}</td>
+              </tr>
+            </tbody>
+          </table>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Учебный год</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
+        outsideDays="hidden">
+      </ngb-datepicker>
+
+      <ng-template #t let-date let-focused="focused">
+        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+          [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+          (mouseleave)="hoveredDate = null">
+          {{ date.day }}
+        </span>
+      </ng-template>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close(); submitDate()">Сохранить</button>
+    </div>
+  </ng-template>
+
+  <ng-template #addUniver let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Добавление университета</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label>Университет</label>
+      <input type="text" autocomplete="off" #fullName placeholder="Университет" name="fullName">
+
+      <label>Сокращенное название</label>
+      <input type="text" autocomplete="off" #name placeholder="Сокращенное название" name="name">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close(); addUniversity(name.value, fullName.value)">Добавить</button>
+    </div>
+  </ng-template>
+
+</div>
+
+<ng-template #other_content>
+  <div class="wrapper__button">
+    <button class="button" (click)="openEditUniversity(0)">Назад</button>
+  </div>
+  <div class="wrapper">
+    <h2 class="title">Университет</h2>
+   <span class="data">{{universityData.university_name_full}}</span>
+  </div>
+  <div class="wrapper">
+    <h2 class="title">Факультеты</h2>
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    <br>
+    <table class="users table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Факультет</th>
+          <th scope="col">Сокращенное название</th>
+          <th scope="col">Действия</th>
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        <tr *ngFor="let faculty of facultyAtUniversity; let i = index">
+          <td>{{faculty.faculty_name_full}}</td>
+          <td>{{faculty.faculty_name}}</td>
+          <td>
+            <div class="user__role role">
+              <button class="user__delete button" (click)="deleteFaculty(faculty.faculty_id)">Удалить</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="button" (click)="open(addFacultyModal)">Добавить</button>
+  </div>
+  <div class="wrapper">
+    <h2 class="title">Кафедры</h2>
+    <div>
+      <label for="institute">Выберите факультет</label>
+      <ng-select  (change) = "getCathedra(facultyId)" 
+                [(ngModel)]="facultyId"
+                [items] = "facultyAtUniversity"
+                bindLabel="faculty_name"
+                bindValue="faculty_id"
+                name="faculty"
+                placeholder="Факультет">
+      </ng-select>
+      <br>
+    </div>
+    <table class="users table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Факультет</th>
+          <th scope="col">Кафедра</th>
+          <th scope="col">Сокращенное название</th>
+          <th scope="col">Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cathedra of cathedraAll; let i = index">
+          <td>{{cathedra.faculty_name}}</td>
+          <td>{{cathedra.cathedra_name_full}}</td>
+          <td>{{cathedra.cathedra_name}}</td>
+          <td>
+            <div class="user__role role">
+              <button class="user__delete button" (click)="deleteCathedra(cathedra.cathedra_id, facultyId)">Удалить</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="button">Добавить</button>
+  </div>
+  <div class="wrapper">
+    <h2 class="title">Специальности</h2>
+    <div>
+      <label for="institute">Выберите кафедру</label>
+      <ng-select  (change)="getSpecialty(cathedraId)" 
+                [(ngModel)]="cathedraId"
+                [items] = "cathedraAll"
+                bindLabel="cathedra_name"
+                bindValue="cathedra_id"
+                name="cathedra"
+                placeholder="Кафедра">
+      </ng-select>
+      <br>
+    </div>
+    <table class="users table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Кафедра</th>
+          <th scope="col">Специальность</th>
+          <th scope="col">Сокращенное название</th>
+          <th scope="col">Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let specialty of specialties; let i = index">
+          <td>{{specialty.cathedra_name}}</td>
+          <td>{{specialty.cathedra_name_full}}</td>
+          <td>{{specialty.cathedra_name}}</td>
+          <td>
+            <div class="user__role role">
+              <button class="user__delete button"(click)="deleteSpecialty(specialty.specialty_id)">Удалить</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="button">Добавить</button>
+  </div>
+</ng-template>
+
+<ng-template #addFacultyModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Добавление факультета</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label>Факультет</label>
+    <input type="text" autocomplete="off" #fullName placeholder="Факультет" name="fullName">
+
+    <label>Сокращенное название</label>
+    <input type="text" autocomplete="off" #name placeholder="Сокращенное название" name="name">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close(); addFaculty(name.value, fullName.value)">Добавить</button>
+  </div>
+</ng-template>

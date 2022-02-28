@@ -1,0 +1,148 @@
+<header>
+  <img src="../../../../../assets/icons/unnamed.jpg" width="70">
+  <div class="user">
+    <span class="header__name">{{userName['user_second_name']}} {{userName['user_first_name']}} 
+      {{userName['user_middle_name']}} {{userInfo['vacancy']}}</span>
+    <div ngbDropdown class="d-inline-block">
+      <img src="../../../../../assets/icons/user.png" width="55"  class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button ngbDropdownItem (click)="logoutUser()">
+          Выйти
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrapper">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <li [ngbNavItem]="1">
+      <a ngbNavLink>Студенты</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Фамилия</th>
+              <th scope="col">Имя</th>
+              <th scope="col">Отчество</th>
+              <th scope="col">Группа</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of studentsList" class="users__user user">
+              <td> {{student.user_second_name}}</td>
+              <td> {{student.user_first_name}}</td>
+              <td> {{student.user_middle_name}}</td>
+              <td> {{student.group_name}}</td>
+              <td>
+                <div class="user__actions">
+                  <button class="button" class="btn btn-info">Записать</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink>Мои студенты</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Фамилия</th>
+              <th scope="col">Имя</th>
+              <th scope="col">Отчество</th>
+              <th scope="col">Группа</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let map of vacancyMap | keyvalue" class="users__user user">
+              <td> {{map.key}}</td>
+              <td> {{map.value}}</td>
+              <td> </td>
+              <td> </td>
+              <td></td>
+              <td> </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="3">
+      <a ngbNavLink>Темы</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Тема</th>
+              <th scope="col">Студент</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let work of diplomWorksList" class="users__user user">
+              <td> {{work.name}}</td>
+              <td> {{work.id_student}}</td>
+              <td> 
+                <div class="user__actions">
+                  <button class="button">Редактировать</button>
+                  <button class="user__delete button">Удалить</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="4">
+      <a ngbNavLink>Мои темы</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Тема</th>
+              <th scope="col">Студент</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let work of diplomWorksList" class="users__user user">
+              <td> {{work.name}}</td>
+              <td> {{work.id_student}}</td>
+              <td> 
+                <div class="user__actions">
+                  <button class="button">Редактировать</button>
+                  <button class="user__delete button">Удалить</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="5">
+      <a ngbNavLink>Места</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Студент</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let date of dates; let i = index" class="users__user user">
+              <td> {{work.name}}</td>
+              <td> {{work.id_student}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+  </ul>
+  <div [ngbNavOutlet]="nav"></div>
+</div>

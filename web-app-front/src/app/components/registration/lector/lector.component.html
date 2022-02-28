@@ -1,0 +1,113 @@
+<div class="wrapper">
+  <form class="form" [formGroup]="lectorForm" (ngSubmit)="submit()">
+    <div class="form__group">
+      <div class="form__group-field">
+        <label for="login">Логин</label>
+        <input type="text" autocomplete="off" placeholder="Логин" name="login" formControlName="userLogin">
+        <div class="alert" *ngIf="userLogin.touched && !userLogin.valid">
+          <span *ngIf="userLogin.errors.required" class="alert__error">
+            Введите данные
+          </span>
+        </div>
+      </div>
+
+      <div class="form__group-field">
+        <label for="password">Пароль</label>
+        <input type="password" minlength="6" autocomplete="off" placeholder="Пароль" name="password"
+          formControlName="userPassword">
+        <div class="alert" *ngIf="userPassword.touched && !userPassword.valid">
+          <span *ngIf="userPassword.errors.required" class="alert__error">
+            Введите данные
+          </span>
+          <span *ngIf="userPassword.errors.minlength" class="alert__error">
+            Минимум 6 символов
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form__group">
+      <div class="form__group-field">
+        <label for="secondName">Фамилия</label>
+        <input type="text" autocomplete="off" placeholder="Фамилия" name="secondName" formControlName="userSecondName">
+        <div class="alert" *ngIf="userSecondName.touched && !userSecondName.valid">
+          <span *ngIf="userSecondName.errors.required" class="alert__error">
+            Введите данные
+          </span>
+          <span *ngIf="userSecondName.errors.pattern" class="alert__error">
+            Только кирилица и без символов
+          </span>
+        </div>
+      </div>
+
+      <div class="form__group-field">
+        <label for="firstName">Имя</label>
+        <input type="text" autocomplete="off" placeholder="Имя" name="firstName" formControlName="userFirstName">
+        <div class="alert" *ngIf="userFirstName.touched && !userFirstName.valid">
+          <span *ngIf="userFirstName.errors.required" class="alert__error">
+            Введите данные
+          </span>
+          <span *ngIf="userFirstName.errors.pattern" class="alert__error">
+            Только кирилица и без символов
+          </span>
+        </div>
+      </div>
+
+      <div class="form__group-field">
+        <label for="middleName">Отчество</label>
+        <input type="text" autocomplete="off" placeholder="Отчество" name="middleName" formControlName="userMiddleName">
+        <div class="alert" *ngIf="userMiddleName.touched && !userMiddleName.valid">
+          <span *ngIf="userMiddleName.errors.required" class="alert__error">
+            Введите данные
+          </span>
+          <span *ngIf="userMiddleName.errors.pattern" class="alert__error">
+            Только кирилица и без символов
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form__group">
+      <div class="form__group-field">
+        <label for="university">Университет</label>
+        <ng-select (change)="getStudyStep('faculty',$event)" formControlName="userUniversity" [clearable]="false"
+          [items]="university" bindLabel="university_name" name="university" [searchable]="false"
+          bindValue="university_id" placeholder="Университет"></ng-select>
+      </div>
+
+      <div class="form__group-field">
+        <label for="institute">Факультет</label>
+        <ng-select (change)="getStudyStep('cathedra',$event)" formControlName="userFaculty"  [clearable]="false"
+          [items]="faculty" bindLabel="faculty_name" name="faculty" [searchable]="false"
+          bindValue="faculty_id" placeholder="Факультет"></ng-select>
+      </div>
+
+      <div class="form__group-field">
+        <label for="institute">Кафедра</label>
+        <ng-select (change)="getStudyStep('specialty',$event)" formControlName="userCathedra"  [clearable]="false"
+          [items]="cathedra" name="cathedra" bindLabel="cathedra_name" [searchable]="false"
+          bindValue="cathedra_id" placeholder="Кафедра">
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="form__group">
+      <div class="form__group-field">
+        <label for="institute">Специальность</label>
+        <ng-select (change)="getStudyStep('group',$event)"  formControlName="userSpecialty"  [clearable]="false"
+          [items]="specialty" name="specialty" bindLabel="specialty_name"
+          [searchable]="false" bindValue="specialty_id" placeholder="Специальность">
+        </ng-select>
+      </div>
+
+      <div class="form__group-field">
+        <label for="institute">Группа</label>
+        <ng-select [clearable]="false" [items]="group" formControlName="userGroup"
+          name="group" bindLabel="group_name" [searchable]="false" bindValue="group_id" placeholder="Группа">
+        </ng-select>
+      </div>
+    </div>
+
+    <button class="form__group-btn" (click)='showInvalidFields()'>Регистрация</button>
+  </form>
+</div>

@@ -1,0 +1,38 @@
+<div class="wrapper">
+  <form class="form" [formGroup]="loginForm" (ngSubmit)="submit()">
+    <div class="form__group column">
+
+      <div class="form__group-field">
+        <label for="login">Логин</label>
+        <input type="text" autocomplete="off" placeholder="Логин" name="login" formControlName="userLogin">
+        <div class="alert" *ngIf="userLogin.touched && !userLogin.valid">
+          <span *ngIf="userLogin.errors.required" class="alert__error">
+            Введите данные
+          </span>
+        </div>
+      </div>
+
+      <div class="form__group-field">
+        <label for="password">Пароль</label>
+        <input type="password" minlength="6" autocomplete="off" placeholder="Пароль" name="password"
+          formControlName="userPassword">
+        <div class="alert" *ngIf="userPassword.touched && !userPassword.valid">
+          <span *ngIf="" class="alert__error">
+            Введите данные
+          </span>
+          <span *ngIf="userPassword.errors.minlength" class="alert__error">
+            Минимум 6 символов
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="alert" *ngIf="status === 400">
+      <span class="alert__error">
+        Неверный логин или пароль
+      </span>
+    </div>
+
+    <button class="form__group-btn" (click)='showInvalidFields()' >Войти</button>
+    <span class="info">У вас еще нет аккаутна? <a [routerLink]="['']">Зарегистрируйтесь!</a></span>
+  </form>
+</div>
