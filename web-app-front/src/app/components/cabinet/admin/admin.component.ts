@@ -5,19 +5,31 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { StudyInfoService } from 'src/app/services/study/study-info.service';
 import { STUDY } from 'src/app/constants/globals';
+import {UserService} from "../../../services/user/user.service";
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+  user = {
+    user_login: '',
+    user_password: '',
+    user_first_name: '',
+    user_second_name: '',
+    user_middle_name: '',
+    user_confirm: false,
+  };
+  submitted = false;
+  users: any;
+
 
   hoveredDate: NgbDate | null = null;
   userName = JSON.parse(localStorage.getItem('user'));
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
 
-  
+
   dates: any;
   faculties;        // все факультеты
   cathedraAll;
@@ -36,22 +48,37 @@ export class AdminComponent implements OnInit {
   universityChoose: any;
 
   constructor(private admin: AdminService,
-          private calendar: NgbCalendar, 
+          private calendar: NgbCalendar,
           public formatter: NgbDateParserFormatter,
           private modalService: NgbModal,
           private authService: AuthService,
           private router: Router,
-          private studyInfo: StudyInfoService) { 
-    this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+          private userService: UserService,
+          private studyInfo: StudyInfoService) {
+            this.fromDate = calendar.getToday();
+            this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
-  
+
   async ngOnInit() {
-    this.listOfUsers =  await this.admin.getAllUsers()
-    this.listOfUsers.sort((a, b) => (a.user_first_name > b.user_first_name) ? 1 : -1)
+    // this.listOfUsers =  await this.admin.getAllUsers()
+    // this.listOfUsers.sort((a, b) => (a.user_first_name > b.user_first_name) ? 1 : -1)
+    this.listOfUsers =
     await this.getAllDate();
     await this.getAllFaculty();
     await this.getAllUniversity();
+    this.retrieveUsers();
+  }
+
+  async retrieveUsers() {
+    this.userService.getAll()
+      .subscribe(
+        data => {
+          this.users = data;
+          console.log(data);
+        },
+        error => {
+          console.log(error);
+        });
   }
 
   async delete(id) {

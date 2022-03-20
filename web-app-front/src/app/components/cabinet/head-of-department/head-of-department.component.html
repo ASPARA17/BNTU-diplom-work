@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">-->
+
 
 <header>
   <img src="../../../../assets/icons/unnamed.jpg" width="70">
@@ -17,13 +18,50 @@
 </header>
 
 
-
-
 <div class="wrapper">
   <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
     <li [ngbNavItem]="1">
       <a ngbNavLink>Пользователи</a>
       <ng-template ngbNavContent>
+
+<!--        <gui-grid [columns]="columnsUsers"-->
+<!--                  [source]="usersList"-->
+<!--                  [searching]="searching">-->
+<!--        </gui-grid>-->
+
+
+        <gui-grid [source]="usersList"
+                  [searching]="searching"
+                  [columnMenu]="columnMenu"
+                  [sorting]="sorting">
+
+          <gui-grid-column header="#" width="60">
+            <ng-template let-index="index">
+              #{{index+1}}
+            </ng-template>
+          </gui-grid-column>
+
+          <gui-grid-column header="Фамилия" field="user_second_name">
+            <ng-template let-value="value">
+              {{value}}
+            </ng-template>
+          </gui-grid-column>
+
+          <gui-grid-column header="Имя" field="user_first_name" >
+            <ng-template let-value="value">
+              <i>{{value}}</i>
+            </ng-template>
+          </gui-grid-column>
+
+          <gui-grid-column header="Actions" width="200">
+            <ng-template let-item="item">
+              <button mat-stroked-button (click)="showDetails(item)">Details</button>
+              <button mat-stroked-button (click)="remove(item)">Remove</button>
+            </ng-template>
+          </gui-grid-column>
+
+        </gui-grid>
+
         <table class="users table table-striped">
           <thead>
             <tr>
@@ -53,7 +91,6 @@
                       </button>
                     </div>
                   </div>
-
                 </div>
               </td>
               <td>
@@ -80,8 +117,32 @@
                       name="group"
                       placeholder="Группа">
           </ng-select>
+
+
+<!--          <form class="form-inline">-->
+<!--            <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">-->
+<!--            &lt;!&ndash;          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>&ndash;&gt;-->
+<!--            <button type="button" class="add_button btn btn-primary">-->
+<!--              <i class="icon-glass"></i>-->
+<!--            </button>-->
+<!--          </form>-->
           <br>
         </div>
+
+<!--        <div class="input-group">-->
+<!--          <div class="form-outline">-->
+<!--            <input type="search" id="form1" class="form-control" />-->
+<!--            <label class="form-label" for="form1">Поиск</label>-->
+<!--          </div>-->
+<!--          <button type="button" class="add_button btn btn-primary">-->
+<!--            <i class="icon-glass"></i>-->
+<!--          </button>-->
+<!--        </div>-->
+        <div>
+
+        </div>
+
+
         <table class="users table table-striped">
           <thead>
             <tr>
@@ -90,7 +151,6 @@
               <th scope="col">Фамилия</th>
               <th scope="col">Имя</th>
               <th scope="col">Отчество</th>
-              <th>Иконки</th>
             </tr>
           </thead>
           <tbody>
@@ -100,9 +160,6 @@
               <td> {{student.user_second_name}}</td>
               <td> {{student.user_first_name}}</td>
               <td> {{student.user_middle_name}}</td>
-              <td>
-                <i class="fa-light fa-pen-to-square"></i>
-              </td>
             </tr>
           </tbody>
         </table>
@@ -111,6 +168,11 @@
     <li [ngbNavItem]="3">
       <a ngbNavLink>Специальности</a>
       <ng-template ngbNavContent>
+        <div class="addButton">
+          <button class="add_button btn btn-primary btn-sm ms-3" (click)="open(addSpecialtyModal)">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
         <table class="users table table-striped">
           <thead>
             <tr>
@@ -126,16 +188,22 @@
               <td contenteditable='true'> {{specialty.specialty_name}}</td>
               <td> {{specialty.specialty_number}}</td>
               <td>
-                <div class="user__actions">
-
-                  <button class="button" (click)="open(editSpecialtyModal)">Редактировать</button>
-                  <button class="user__delete button" (click)="deleteSpecialty(specialty.specialty_id)">Удалить</button>
+<!--                <div class="user__actions">-->
+<!--                  <button class="button" (click)="openEdit(editModal, specialty)">Редактировать</button>-->
+<!--                  <button class="user__delete button" (click)="deleteSpecialty(specialty.specialty_id)">Удалить</button>-->
+<!--                </div>-->
+                <div>
+                  <button class="me-2 btn btn-lg text-dark edit-button">
+                    <i class="icon-pencil" (click)="open(addSpecialtyModal1)"></i>
+                  </button>
+                  <button class="btn btn-lg text-dark delete-button" (click)="deleteSpecialty(specialty.specialty_id)">
+                    <i class="icon-trash"></i>
+                  </button>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <button class="btn btn-lg btn-outline-primary" (click)="open(addSpecialtyModal)">Добавить</button>
       </ng-template>
     </li>
     <li [ngbNavItem]="4">
@@ -147,23 +215,22 @@
           </button>
         </div>
 
-        <table class="users table table-striped table-hover" >
+        <table class="table table-bordered table-responsive-md table-striped text-center" id="example" style="padding: 0.3rem">
           <thead>
             <tr>
-
-              <th scope="col" data-sortable="true">Специальность</th>
+              <th scope="col">Специальность</th>
               <th scope="col">Группа</th>
               <th scope="col">Дейсвтия</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let group of groupsList" class="users__user user">
-              <td> {{group.specialty_name}}</td>
-              <td> {{group.group_name}}</td>
-              <td>
+              <td style="padding: 0.3rem"> {{group.specialty_name}}</td>
+              <td style="padding: 0.3rem"> {{group.group_name}}</td>
+              <td style="padding: 0.3rem">
                 <div>
                   <button class="me-2 btn btn-lg text-dark edit-button">
-                    <i class="icon-pencil"></i>
+                    <i class="icon-pencil" (click)="open(addGroupModal1)"></i>
                   </button>
                   <button class="btn btn-lg text-dark delete-button" (click)="deleteGroup(group.group_id)">
                     <i class="icon-trash"></i>
@@ -173,6 +240,7 @@
             </tr>
           </tbody>
         </table>
+
       </ng-template>
     </li>
     <li [ngbNavItem]="5">
@@ -200,137 +268,229 @@
       </ng-template>
     </li>
     <li [ngbNavItem]="6">
+      <a ngbNavLink>ГЭК</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Дата начала</th>
+            <th scope="col">Дата окончания</th>
+            <th scope="col">Действия</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of sec; let i = index">
+            <td>{{item.sec_number}}</td>
+            <td>{{item.sec_start_date}}</td>
+            <td>{{item.sec_end_date}}</td>
+            <td>
+              <div class="user__role role">
+                <button class="button" (click)="openEditSec(item.sec_id); getSecCathedra(); getSecSpecialty();
+                                  getSecGroup(); getSecPercent();getSecEvent();getSecUsers();">Редактировать</button>
+                <button class="user__delete button" (click)="deleteSec(item.sec_id)">Удалить</button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Добавить ГЭК</button>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="7">
+      <a ngbNavLink>Темы</a>
+      <ng-template ngbNavContent>
+        <table class="users table table-striped">
+          <thead>
+          <tr>
+            <th scope="col" style="width:50%">Тема</th>
+            <th scope="col">Руководитель</th>
+            <th scope="col">Студент</th>
+            <th scope="col">Действия</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let work of allDiplomWorksList" class="users__user user">
+            <td> {{work.name}}</td>
+            <td> {{work.id_leader}}</td>
+            <td> {{work.id_student}}</td>
+            <td>
+              <div class="user__actions">
+                                  <button class="button">Редактировать</button>
+                                  <button class="user__delete button">Удалить</button>
+                                </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="8">
       <a ngbNavLink>Таблица</a>
       <ng-template ngbNavContent>
-        <!-- Editable table -->
-<div class="card">
-  <h3 class="card-header text-center font-weight-bold text-uppercase py-4">
-    Editable table
-  </h3>
-  <div class="card-body">
-    <div id="table" class="table-editable">
-      <span class="table-add float-right mb-3 mr-2"
-        ><a href="#!" class="text-success"
-          ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
-      ></span>
-      <table class="table table-bordered table-responsive-md table-striped text-center">
-        <thead>
+
+
+        <mat-form-field class="example-form-field" appearance="fill">
+          <mat-label>Clearable input</mat-label>
+          <input matInput type="text" [(ngModel)]="value">
+          <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+
+        <form class="example-form">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Favorite food</mat-label>
+            <input matInput placeholder="Ex. Pizza" value="Sushi">
+          </mat-form-field>
+
+        </form>
+
+        <table class="users table table-striped">
+          <thead>
           <tr>
-            <th class="text-center">Person Name</th>
-            <th class="text-center">Age</th>
-            <th class="text-center">Company Name</th>
-            <th class="text-center">Country</th>
-            <th class="text-center">City</th>
-            <th class="text-center">Sort</th>
-            <th class="text-center">Remove</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Отчество</th>
+            <th scope="col">Роли</th>
+            <th scope="col">Действия</th>
           </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="pt-3-half" contenteditable="true">Aurelia Vega</td>
-            <td class="pt-3-half" contenteditable="true">30</td>
-            <td class="pt-3-half" contenteditable="true">Deepends</td>
-            <td class="pt-3-half" contenteditable="true">Spain</td>
-            <td class="pt-3-half" contenteditable="true">Madrid</td>
-            <td class="pt-3-half">
-              <span class="table-up"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a
-              ></span>
-              <span class="table-down"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a
-              ></span>
-            </td>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of users" class="users__user user">
+            <td> {{user.user_second_name}}</td>
+            <td> {{user.user_first_name}}</td>
+            <td> {{user.user_middle_name}}</td>
+            <td></td>
             <td>
-              <span class="table-remove"
-                ><button type="button" class="btn btn-danger btn-rounded btn-sm my-0">
-                  Remove
-                </button></span
-              >
+              <div>
+                <button class="me-2 btn btn-lg text-dark edit-button">
+                  <i class="icon-pencil" (click)="openDialog()"></i>
+                </button>
+                <button class="btn btn-lg text-dark delete-button">
+                  <i class="icon-trash"></i>
+                </button>
+              </div>
             </td>
           </tr>
-          <!-- This is our clonable table line -->
-          <tr>
-            <td class="pt-3-half" contenteditable="true">Guerra Cortez</td>
-            <td class="pt-3-half" contenteditable="true">45</td>
-            <td class="pt-3-half" contenteditable="true">Insectus</td>
-            <td class="pt-3-half" contenteditable="true">USA</td>
-            <td class="pt-3-half" contenteditable="true">San Francisco</td>
-            <td class="pt-3-half">
-              <span class="table-up"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a
-              ></span>
-              <span class="table-down"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a
-              ></span>
-            </td>
-            <td>
-              <span class="table-remove"
-                ><button type="button" class="btn btn-danger btn-rounded btn-sm my-0">
-                  Remove
-                </button></span
-              >
-            </td>
-          </tr>
-          <!-- This is our clonable table line -->
-          <tr>
-            <td class="pt-3-half" contenteditable="true">Guadalupe House</td>
-            <td class="pt-3-half" contenteditable="true">26</td>
-            <td class="pt-3-half" contenteditable="true">Isotronic</td>
-            <td class="pt-3-half" contenteditable="true">Germany</td>
-            <td class="pt-3-half" contenteditable="true">Frankfurt am Main</td>
-            <td class="pt-3-half">
-              <span class="table-up"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a
-              ></span>
-              <span class="table-down"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a
-              ></span>
-            </td>
-            <td>
-              <span class="table-remove"
-                ><button type="button" class="btn btn-danger btn-rounded btn-sm my-0">
-                  Remove
-                </button></span
-              >
-            </td>
-          </tr>
-          <!-- This is our clonable table line -->
-          <tr class="hide">
-            <td class="pt-3-half" contenteditable="true">Elisa Gallagher</td>
-            <td class="pt-3-half" contenteditable="true">31</td>
-            <td class="pt-3-half" contenteditable="true">Portica</td>
-            <td class="pt-3-half" contenteditable="true">United Kingdom</td>
-            <td class="pt-3-half" contenteditable="true">London</td>
-            <td class="pt-3-half">
-              <span class="table-up"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-up" aria-hidden="true"></i></a
-              ></span>
-              <span class="table-down"
-                ><a href="#!" class="indigo-text"
-                  ><i class="fas fa-long-arrow-alt-down" aria-hidden="true"></i></a
-              ></span>
-            </td>
-            <td>
-              <span class="table-remove"
-                ><button type="button" class="btn btn-danger btn-rounded btn-sm my-0">
-                  Remove
-                </button></span
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<!-- Editable table -->
+          </tbody>
+        </table>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="9">
+      <a ngbNavLink>Пример</a>
+      <ng-template ngbNavContent>
+        <gui-grid #grid
+                  id="agile-grid"
+                  [theme]="'generic'"
+                  [source]="source"
+                  [rowColoring]="'none'"
+                  [sorting]="sorting"
+                  [paging]="false"
+                  [columnMenu]="columnMenu"
+                  [verticalGrid]="false"
+                  [horizontalGrid]="true"
+                  [cellEditing]="true"
+                  [rowHeight]="70"
+                  [rowSelection]="rowSelection"
+                  [summaries]="summaries"
+                  [loading]="loading"
+                  [infoPanel]="false">
+
+          <gui-grid-column header="Name" type="string" width="250"
+                           [sorting]="columnSorting" [cellEditing]="false" [matcher]="columnMatcher">
+            <ng-template let-value="value" let-index="index" let-item="item">
+
+			<span class="gui-user-wrapper">
+				<img src="{{item.avatar}}" class="gui-user-img" />
+			</span>
+
+              <div class="gui-user-info" >
+                <span class="gui-user-info-name" >{{item.name}}</span>
+                <span class="gui-user-info-position" >{{item.position}}</span>
+              </div>
+
+            </ng-template>
+          </gui-grid-column>
+
+          <gui-grid-column header="Company" [field]="'company'" type="string" view="text"
+                           [cellEditing]="true">
+          </gui-grid-column>
+
+          <gui-grid-column header="Rating" field="rating" type="number" width="100"
+                           [cellEditing]="true">
+          </gui-grid-column>
+
+          <gui-grid-column header="Mobile" field="mobile" type="string" view="italic"
+                           [enabled]="false"
+                           [cellEditing]="false" align="right">
+          </gui-grid-column>
+
+          <gui-grid-column header="Status" field="status" type="string" width="160" sorting="false"
+                           [cellEditing]="false" >
+            <ng-template let-value="value" let-item="item">
+
+              <gui-select [options]="[{value: 'Active'}, {value: 'Inactive'}]"
+                          [selected]="{value: value}"
+                          [width]="60">
+              </gui-select>
+
+            </ng-template>
+          </gui-grid-column>
+
+          <gui-grid-column header="Training" field="training" type="number" view="bar" width="140"
+                           [summaries]="budgetSummaries"
+                           [cellEditing]="true" >
+          </gui-grid-column>
+
+          <gui-grid-column header="Budget" field="budget" type="number" width="150"
+                           [summaries]="trainingSummaries"
+                           [cellEditing]="true" >
+            <ng-template let-value="value">
+
+              <ng-container *ngIf="value > 0">
+                <div class="gui-align-right gui-budget" style="color: #268e28">$ {{value}}.00</div>
+              </ng-container>
+
+              <ng-container *ngIf="value === 0">
+                <div class="gui-align-right gui-budget" style="color: #0747a6">$ {{value}}.00</div>
+              </ng-container>
+
+              <ng-container *ngIf="value < 0">
+                <div class="gui-align-right gui-budget" style="color: #951f1d">$ {{value}}.00</div>
+              </ng-container>
+
+            </ng-template>
+          </gui-grid-column>
+
+          <gui-grid-column [cellEditing]="false" [sorting]="false" width="60" >
+            <ng-template let-value="value" let-item="item">
+
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="showDetails(item)">
+                  <mat-icon>info</mat-icon>
+                  <span>Show details</span>
+                </button>
+                <button mat-menu-item disabled>
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="remove(item.id)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Remove</span>
+                </button>
+              </mat-menu>
+
+            </ng-template>
+          </gui-grid-column>
+
+        </gui-grid>
+
+
       </ng-template>
     </li>
   </ul>
@@ -364,6 +524,28 @@
     </div>
   </ng-template>
 
+  <ng-template #addGroupModal1 let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Редактирование группы</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <label>Специальность</label>
+      <input type="text" autocomplete="off" #specialty placeholder="" name="specialty" value="ИСиТ(в проектировании и производстве)">
+
+
+      <label>Номер группы</label>
+      <input type="text" autocomplete="off" #groupName placeholder="Номер группы" name="groupName" value="10702417">
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close();">Редактировать</button>
+    </div>
+  </ng-template>
+
   <ng-template #addSpecialtyModal let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Добавление специальности</h4>
@@ -383,6 +565,28 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="modal.close(); addSpecialty(name.value, fullName.value, number.value)">Добавить</button>
+    </div>
+  </ng-template>
+
+  <ng-template #addSpecialtyModal1 let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Редактирование специальности</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label>Специальность</label>
+      <input type="text" autocomplete="off" #fullName placeholder="Специальность" name="fullName" value="Информационные системы и технологии в проектировании и производстве">
+
+      <label>Аббревиатура</label>
+      <input type="text" autocomplete="off" #name placeholder="Аббревиатура" name="name" value="ИСиТ(в проектировании и производстве)">
+
+      <label>Код</label>
+      <input type="text" autocomplete="off" #number placeholder="Код" name="number">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modal.close();">Редактировать</button>
     </div>
   </ng-template>
 
@@ -409,5 +613,29 @@
     </div>
   </ng-template>
 
+  <ng-template #editModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Редактирование специальности</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label>Специальность</label>
+      <input type="text" autocomplete="off" #fullName name="fullName" value="{{specialty.specialty_name_full}}">
+
+      <label>Аббревиатура</label>
+      <input type="text" autocomplete="off" #name name="name">
+
+      <label>Код</label>
+      <input type="text" autocomplete="off" #number name="number">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modal.close(); addSpecialty(name.value, fullName.value, number.value)">Добавить</button>
+    </div>
+  </ng-template>
+
 </div>
+
+
 

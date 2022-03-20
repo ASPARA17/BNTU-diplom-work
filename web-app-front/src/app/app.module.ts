@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule }   from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { GuiGridModule } from '@generic-ui/ngx-grid';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,7 +21,20 @@ import { SecretaryCabinetComponent } from './components/cabinet/secretary/secret
 import { LectorComponent } from './components/registration/lector/lector.component';
 import { LectorCabinetComponent } from './components/cabinet/lector/lector-cabinet/lector-cabinet.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HeadOfDepartmentComponent } from './components/cabinet/head-of-department/head-of-department.component';
+import {
+  DialogOverviewExampleDialog,
+  HeadOfDepartmentComponent
+} from './components/cabinet/head-of-department/head-of-department.component';
+import { AddRoleComponent } from './components/role/add-role/add-role.component';
+import { RoleDetailsComponent } from './components/role/role-details/role-details.component';
+import { RolesListComponent } from './components/role/roles-list/roles-list.component';
+import { TableComponent } from './components/table/table.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatButtonModule} from "@angular/material/button";
+import {MatInputModule} from "@angular/material/input";
+import {MatIconModule} from '@angular/material/icon';
 
 const appRoutes: Routes = [
   {path: '', component:MainComponent},
@@ -46,18 +61,30 @@ const appRoutes: Routes = [
     SecretaryCabinetComponent,
     LectorComponent,
     LectorCabinetComponent,
-    HeadOfDepartmentComponent
+    HeadOfDepartmentComponent,
+    AddRoleComponent,
+    RoleDetailsComponent,
+    RolesListComponent,
+    TableComponent,
+    DialogOverviewExampleDialog
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    RouterModule.forRoot(appRoutes),
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgSelectModule,
-    NgbModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        RouterModule.forRoot(appRoutes),
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgSelectModule,
+        NgbModule,
+        GuiGridModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatInputModule,
+        MatIconModule
+    ],
   providers: [RoleGuard],
   bootstrap: [AppComponent]
 })

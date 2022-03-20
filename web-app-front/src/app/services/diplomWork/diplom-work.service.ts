@@ -13,7 +13,7 @@ import {
   providedIn: 'root'
 })
 export class DiplomWorkService {
-    
+
   constructor(private http: HttpClient, private router: Router) {
   }
 
@@ -33,4 +33,19 @@ export class DiplomWorkService {
     return diplomWorks
   }
 
+  async bookDiploma(leaderId, diplomaId) {
+    const body = {leaderId, diplomaId};
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    await this.http.put('http://localhost:5000/diplom-work/book_theme', body, {
+      headers: token
+    }).toPromise();
+  }
+
+  async updateStatusDiploma(diplomaId) {
+    const body = {diplomaId};
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    await this.http.put('http://localhost:5000/diplom-work/update_status', body, {
+      headers: token
+    }).toPromise();
+  }
 }

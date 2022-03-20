@@ -8,3 +8,6 @@ body{
 @import '~bootstrap/scss/bootstrap';
 /* Importing icon font */
 @import url("../src/assets/css/iconfont.css");
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

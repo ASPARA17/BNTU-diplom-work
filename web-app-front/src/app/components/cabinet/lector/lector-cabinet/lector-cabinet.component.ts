@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { HeadOfDepartmentService } from 'src/app/services/headOfDepartment/head-of-department.service';
 import { DiplomWorkService } from 'src/app/services/diplomWork/diplom-work.service';
+import {LectorService} from "../../../../services/lector/lector.service";
 
 @Component({
   selector: 'app-lector-cabinet',
@@ -15,21 +16,25 @@ export class LectorCabinetComponent implements OnInit {
   userInfo = JSON.parse(localStorage.getItem('userInfo'));
   studentsList;
   diplomWorksList;
+  allDiplomWorksList
   active = 1;
   vacancyList = [];
   vacancyMap = new Map();
+  studentsLector;
 
 
   constructor(private authService: AuthService,
               private router: Router,
               private headOfDepartment: HeadOfDepartmentService,
-              private diplomWork: DiplomWorkService) { }
+              private diplomWork: DiplomWorkService,
+              private lector: LectorService) { }
 
   ngOnInit(): void {
     this.getInfoLStudents();
-    //this.getAllDiplomWorks();
+    this.getAllDiplomWorks();
     this.getDiplomWorksByIdLector();
     this.initVacancyList();
+    this.getStudentsByLeaderId();
     //this.initMap();
   }
 
@@ -40,10 +45,12 @@ export class LectorCabinetComponent implements OnInit {
 
   // все дипломные работы
   async getAllDiplomWorks() {
-    this.diplomWorksList = await this.diplomWork.getAllDiplomWorks()
+    console.log("all diplom work")
+    this.allDiplomWorksList = await this.diplomWork.getAllDiplomWorks()
   }
 
   async getDiplomWorksByIdLector() {
+    console.log("diplom work by lector")
     this.diplomWorksList = await this.diplomWork.getDiplomWorksByIdLector(this.userInfo.lector_id)
   }
 
@@ -52,22 +59,22 @@ export class LectorCabinetComponent implements OnInit {
       for (var i = 0; i < this.userInfo.vacancy; i++) {
         this.vacancyList[i] = [i + 1];
       }
-    } 
+    }
   }
 
   async initMapKeys() {
     if (this.userInfo.vacancy !== 0) {
       for (var i = 0; i < this.userInfo.vacancy; i++) {
         this.vacancyMap.set(i+1, null);
-       
+
       }
     }
-    console.log(this.vacancyMap) 
+    console.log(this.vacancyMap)
 
     for (let [key, value] of this.vacancyMap) {
       console.log(key, value);
     }
-    
+
     for (let map of this.vacancyMap) {
       console.log(map);
     }
@@ -82,6 +89,23 @@ export class LectorCabinetComponent implements OnInit {
     }
   }
 
+  async filterDiplomaByStatus(groupId) {
+    this.studentsList = await this.headOfDepartment.getStudentsByGroupId(this.userInfo.cathedra_id, groupId)
+    this.studentsList.sort((a, b) => (a.user_second_name > b.user_second_name) ? 1 : -1)
+    console.log(this.studentsList)
+  }
+
+  async getStudentsByLeaderId() {
+    this.studentsLector = await this.lector.getStudentsByLeaderId(this.userInfo.lector_id)
+  }
+
+  async bookDiploma(diplomaId) {
+    await this.diplomWork.bookDiploma(this.userInfo.lector_id, diplomaId);
+    //await this.diplomWork.updateStatusDiploma(diplomaId);
+    await this.getAllDiplomWorks();
+    await this.getDiplomWorksByIdLector();
+
+  }
 
 
   async logoutUser() {

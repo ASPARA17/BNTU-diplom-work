@@ -18,50 +18,97 @@
   <ul ngbNav #nav="ngbNav" class="nav-tabs">
     <li ngbNavItem>
       <a ngbNavLink>Пользователи</a>
+
+<!--      <ng-template ngbNavContent>-->
+<!--        <table class="users table table-striped">-->
+<!--          <thead>-->
+<!--            <tr>-->
+<!--              <th scope="col">Фамилия</th>-->
+<!--              <th scope="col">Имя</th>-->
+<!--              <th scope="col">Отчество</th>-->
+<!--              <th scope="col">Роли</th>-->
+<!--              <th scope="col">Действия</th>-->
+<!--            </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--            <tr *ngFor="let user of listOfUsers" class="users__user user">-->
+<!--              <td> {{user.user_second_name}}</td>-->
+<!--              <td> {{user.user_first_name}}</td>-->
+<!--              <td> {{user.user_middle_name}}</td>-->
+<!--              <td>-->
+<!--                <div class="user__role role">-->
+<!--                  <div ngbDropdown class="d-inline-block">-->
+<!--                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Роли</button>-->
+<!--                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">-->
+<!--                      <button ngbDropdownItem *ngFor="let role of roles"-->
+<!--                        [ngClass]="{'role__current': role.id === user.role_name}" value={{role.id}}-->
+<!--                        (click)="updateRole(user.user_id,role.id)">-->
+<!--                        <div *ngIf="role.id === user.role_name ; then thenBlock else elseBlock"></div>-->
+<!--                        <ng-template #thenBlock>{{role.name}}</ng-template>-->
+<!--                        <ng-template #elseBlock>{{role.name}}</ng-template>-->
+<!--                      </button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+<!--                </div>-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                <div class="user__actions">-->
+<!--                  <button (click)="delete(user.user_id)" class="user__delete button">Удалить</button>-->
+<!--                  <button *ngIf="!user.user_confirm" (click)="confirm(user.user_id)"-->
+<!--                    class="user__confirm btn">Подтвердить</button>-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+<!--      </ng-template>-->
+
       <ng-template ngbNavContent>
         <table class="users table table-striped">
           <thead>
-            <tr>
-              <th scope="col">Фамилия</th>
-              <th scope="col">Имя</th>
-              <th scope="col">Отчество</th>
-              <th scope="col">Роли</th>
-              <th scope="col">Действия</th>
-            </tr>
+          <tr>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Отчество</th>
+            <th scope="col">Роли</th>
+            <th scope="col">Действия</th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of listOfUsers" class="users__user user">
-              <td> {{user.user_second_name}}</td>
-              <td> {{user.user_first_name}}</td>
-              <td> {{user.user_middle_name}}</td>
-              <td>
-                <div class="user__role role">
-                  <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Роли</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <button ngbDropdownItem *ngFor="let role of roles"
-                        [ngClass]="{'role__current': role.id === user.role_name}" value={{role.id}}
-                        (click)="updateRole(user.user_id,role.id)">
-                        <div *ngIf="role.id === user.role_name ; then thenBlock else elseBlock"></div>
-                        <ng-template #thenBlock>{{role.name}}</ng-template>
-                        <ng-template #elseBlock>{{role.name}}</ng-template>
-                      </button>
-                    </div>
+          <tr *ngFor="let user of users" class="users__user user">
+            <td> {{user.user_second_name}}</td>
+            <td> {{user.user_first_name}}</td>
+            <td> {{user.user_middle_name}}</td>
+            <td>
+              <div class="user__role role">
+                <div ngbDropdown class="d-inline-block">
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Роли</button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button ngbDropdownItem *ngFor="let role of roles"
+                            [ngClass]="{'role__current': role.id === user.role_name}" value={{role.id}}
+                            (click)="updateRole(user.user_id,role.id)">
+                      <div *ngIf="role.id === user.role_name ; then thenBlock else elseBlock"></div>
+                      <ng-template #thenBlock>{{role.name}}</ng-template>
+                      <ng-template #elseBlock>{{role.name}}</ng-template>
+                    </button>
                   </div>
+                </div>
 
-                </div>
-              </td>
-              <td>
-                <div class="user__actions">
-                  <button (click)="delete(user.user_id)" class="user__delete button">Удалить</button>
-                  <button *ngIf="!user.user_confirm" (click)="confirm(user.user_id)"
-                    class="user__confirm btn">Подтвердить</button>
-                </div>
-              </td>
-            </tr>
+              </div>
+            </td>
+            <td>
+              <div class="user__actions">
+                <button (click)="delete(user.user_id)" class="user__delete button">Удалить</button>
+                <button *ngIf="!user.user_confirm" (click)="confirm(user.user_id)"
+                        class="user__confirm btn">Подтвердить</button>
+              </div>
+            </td>
+          </tr>
           </tbody>
         </table>
       </ng-template>
+
     </li>
     <li ngbNavItem>
       <a ngbNavLink>Учебные года</a>
@@ -156,7 +203,7 @@
             </tbody>
           </table>
 
-        
+
       </ng-template>
     </li>
     <li ngbNavItem>
@@ -176,7 +223,7 @@
         </div>
         <div>
           <label for="institute">Выберите факультет</label>
-          <ng-select  (change) = "getCathedra(facultyId)" 
+          <ng-select  (change) = "getCathedra(facultyId)"
                     [(ngModel)]="facultyId"
                     [items] = "facultyAtUniversity"
                     bindLabel="faculty_name"
@@ -294,7 +341,7 @@
     <h2 class="title">Кафедры</h2>
     <div>
       <label for="institute">Выберите факультет</label>
-      <ng-select  (change) = "getCathedra(facultyId)" 
+      <ng-select  (change) = "getCathedra(facultyId)"
                 [(ngModel)]="facultyId"
                 [items] = "facultyAtUniversity"
                 bindLabel="faculty_name"
@@ -332,7 +379,7 @@
     <h2 class="title">Специальности</h2>
     <div>
       <label for="institute">Выберите кафедру</label>
-      <ng-select  (change)="getSpecialty(cathedraId)" 
+      <ng-select  (change)="getSpecialty(cathedraId)"
                 [(ngModel)]="cathedraId"
                 [items] = "cathedraAll"
                 bindLabel="cathedra_name"

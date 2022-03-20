@@ -1,45 +1,43 @@
+
 const express = require("express");
 const app = express();
 
+
 const cors = require("cors");
-const pool = require('./db');
+const pool = require('./config/db');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv')
 const bcryptjs = require('bcryptjs')
 const verify = require('./verifyToken')
 dotenv.config();
 
-const groupRouter = require('./routes/group');
+
+
+const groupRouter = require('./routes/group.js');
+const diplomaRouter = require('./routes/diplom-work');
+const userRouter = require('./routes/user.routes');
+const roleRouter = require('./routes/role.routes');
+const studentRouter = require('./routes/student.routes');
+
+// app.set("view engine", "hbs");
+// app.use(express.urlencoded({ extended: false }));
 
 app.use(cors());
 app.use(express.json());
 
 app.use('/groups', groupRouter);
+app.use('/diplom-work', diplomaRouter);
+app.use('/user', userRouter);
+app.use('/api/roles', roleRouter);
+//app.use('/student', studentRouter)
 
+const db = require("./models/sequelize");
+db.sequelize.sync();
 
-
-// DIPLOM WORK
-const ALL_DIPLOM_WORK = `SELECT name, id_status, id_student, id_leader, mark FROM diplom_work`
-const DIPLOM_WORK_BY_ID_LECTOR = `SELECT name, id_status, id_student, id_leader, mark FROM diplom_work WHERE id_leader = $1`
-
-app.get('/diplom-work/all', async (req, res) => {
-  try {
-    const diplomWork = await pool.query(ALL_DIPLOM_WORK);
-    res.json(diplomWork.rows)
-  } catch (error) {
-    console.log(error.message)
-  }
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to my application." });
 });
 
-app.get('/diplom-work/:leaderId', async (req, res) => {
-  try {
-    const {leaderId} = req.params;
-    const diplomWork = await pool.query(DIPLOM_WORK_BY_ID_LECTOR, [leaderId]);
-    res.json(diplomWork.rows)
-  } catch (error) {
-    console.log(error.message)
-  }
-});
 
 // GROUPS
 const GROUPS_AND_SPECIALTY_BY_CATHEDRA = `SELECT group_id, group_name, specialty_name FROM groups JOIN specialty 
@@ -82,6 +80,9 @@ const INFO_STUDENTS_BY_LEADER_ID_IN_DIPLOM_WORK = `SELECT users.user_first_name,
   FROM users JOIN students ON students.user_id = users.user_id JOIN groups ON groups.group_id = students.group_id
   JOIN diplom_work ON diplom_work.id_student = students.student_id JOIN lectors ON lectors.lector_id = diplom_work.id_leader 
   WHERE lector_id = $1`
+const STUDENTS_BY_LEADER_ID = `SELECT student_id, sec_event_id, user_first_name, user_second_name, user_middle_name, 
+    group_name FROM students JOIN users ON students.user_id = users.user_id JOIN groups ON students.group_id = groups.group_id 
+    WHERE leader_id = $1`;
 
   app.get('/students_info/:cathedraId', async (req, res) => {
     try {
@@ -102,6 +103,16 @@ const INFO_STUDENTS_BY_LEADER_ID_IN_DIPLOM_WORK = `SELECT users.user_first_name,
       console.log(error.message)
     }
   });
+
+app.get('/students/:leaderId', async (req, res) => {
+  try {
+    const {leaderId} = req.params;
+    const students = await pool.query(STUDENTS_BY_LEADER_ID, [leaderId]);
+    res.json(students.rows)
+  } catch (error) {
+    console.log(error.message)
+  }
+});
 
 
 // LECTORS
