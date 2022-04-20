@@ -1,0 +1,43 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span class="title-center">{{dialogData.action}} Group</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="specialtyForm">
+    <div fxFlex fxLayout="column">
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Специальность</mat-label>
+          <input matInput formControlName="specialty_name_full">
+        </mat-form-field>
+
+      </div>
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Аббревиатура</mat-label>
+          <input matInput formControlName="specialty_name">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Код</mat-label>
+          <input matInput formControlName="specialty_number">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Кафедра</mat-label>
+          <mat-select formControlName="fk_cathedra">
+            <mat-option *ngFor="let department of departments" [value]="department.cathedra_id">{{department.cathedra_name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-content align="center">
+  <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()">{{action}}</button>
+  <button  mat-raised-button color="primary" mat-dialog-close>Close</button>
+</mat-dialog-content>
