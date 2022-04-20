@@ -2,7 +2,6 @@
 const express = require("express");
 const app = express();
 
-
 const cors = require("cors");
 const pool = require('./config/db');
 const jwt = require('jsonwebtoken');
@@ -13,14 +12,14 @@ dotenv.config();
 
 
 
-const groupRouter = require('./routes/group.js');
+const groupRouter = require('./routes/group.routes');
 const diplomaRouter = require('./routes/diplom-work');
 const userRouter = require('./routes/user.routes');
 const roleRouter = require('./routes/role.routes');
 const studentRouter = require('./routes/student.routes');
-
-// app.set("view engine", "hbs");
-// app.use(express.urlencoded({ extended: false }));
+const specialtyRouter = require('./routes/specialty.routes');
+const universityRouter = require('./routes/university.routes');
+const departmentRouter = require('./routes/department.routes');
 
 app.use(cors());
 app.use(express.json());
@@ -29,10 +28,14 @@ app.use('/groups', groupRouter);
 app.use('/diplom-work', diplomaRouter);
 app.use('/user', userRouter);
 app.use('/api/roles', roleRouter);
-//app.use('/student', studentRouter)
+//app.use('/student', studentRouter);
+app.use('/specialty', specialtyRouter);
+app.use('/university', universityRouter);
+app.use('/department', departmentRouter);
 
-const db = require("./models/sequelize");
-db.sequelize.sync();
+//
+// const db = require("./models/sequelize");
+// db.sequelize.sync();
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to my application." });
@@ -55,7 +58,7 @@ const ADD_GROUP = `INSERT INTO groups(group_name, fk_specialty) VALUES ($1,$2)`
   });
 */
 /*
-  // in group.js
+
   app.post('/add_group', verify, async (req, res) => {
     try {
       const {groupName, specialtyId} = req.body;
@@ -250,11 +253,11 @@ app.delete('/cathedra/:id', verify, async(req, res) => {
 
 
 // SPECIALTY
-const ALL_SPECIALTY_BY_CATHEDRA = `SELECT specilaty_id, specialty_name_full, specialty_name, specialty_number FROM specialty 
+const ALL_SPECIALTY_BY_CATHEDRA = `SELECT specilaty_id, specialty_name_full, specialty_name, specialty_number FROM specialty
   WHERE fk_cathedra = $1`;
 const DELETE_SPECIALTY_BY_ID = `DELETE FROM specialty WHERE specialty_id = $1`
 const ADD_SPECIALTY = `INSERT INTO specialty(fk_cathedra, specialty_name, specialty_name_full, specialty_number) VALUES($1,$2,$3,$4)`
-const UPDATE_SPECIALTY = `UPDATE specialty SET specialty_name = $1, specialty_name_full = $2, specialty_number = $3 
+const UPDATE_SPECIALTY = `UPDATE specialty SET specialty_name = $1, specialty_name_full = $2, specialty_number = $3
   WHERE specialty_id = $4`
 
 app.put('/specialty', verify, async(req,res) => {

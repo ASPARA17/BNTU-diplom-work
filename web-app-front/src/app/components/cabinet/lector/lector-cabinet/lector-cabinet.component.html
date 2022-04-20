@@ -83,18 +83,18 @@
     <li [ngbNavItem]="3">
       <a ngbNavLink>Темы</a>
       <ng-template ngbNavContent>
-        <div>
-          <label for="institute">Выберите статус</label>
-          <ng-select   (change)="filterStudentsByGroupId(groupId)"
-                       [(ngModel)]="groupId"
-                       [items] = "groupsList"
-                       bindLabel="group_name"
-                       bindValue="group_id"
-                       name="group"
-                       placeholder="">
-          </ng-select>
-          <br>
-        </div>
+<!--        <div>-->
+<!--          <label for="institute">Выберите статус</label>-->
+<!--          <ng-select   (change)="filterStudentsByGroupId(groupId)"-->
+<!--                       [(ngModel)]="groupId"-->
+<!--                       [items] = "groupsList"-->
+<!--                       bindLabel="group_name"-->
+<!--                       bindValue="group_id"-->
+<!--                       name="group"-->
+<!--                       placeholder="">-->
+<!--          </ng-select>-->
+<!--          <br>-->
+<!--        </div>-->
         <table class="users table table-striped">
           <thead>
             <tr>
@@ -142,11 +142,13 @@
               <td> {{work.name}}</td>
               <td> {{work.id_student}}</td>
               <td>
-                <div class="user__actions">
-                  <button class="button" class="btn btn-info">Редактировать</button>
-                </div>
-                <div class="user__actions">
-                  <button class="button" class="btn btn-danger">Отказаться</button>
+                <div>
+                  <button class="me-2 btn btn-lg text-dark edit-button">
+                    <i class="icon-pencil"></i>
+                  </button>
+                  <button class="btn btn-lg text-dark delete-button">
+                    <i class="icon-trash"></i>
+                  </button>
                 </div>
               </td>
             </tr>

@@ -8,7 +8,7 @@ import {HeadOfDepartmentComponent} from "./components/cabinet/head-of-department
 
 const routes: Routes = [
   // { path: '', redirectTo: 'roles', pathMatch: 'full' },
-  // { path: 'roles', component: RolesListComponent },
+   { path: 'roles', component: RolesListComponent },
   // { path: 'roles/:id', component: RoleDetailsComponent },
   // { path: 'add', component: AddRoleComponent }
   { path: 'head_of_department', component: HeadOfDepartmentComponent }

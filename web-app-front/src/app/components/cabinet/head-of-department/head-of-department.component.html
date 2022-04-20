@@ -1,4 +1,4 @@
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 
 <header>
@@ -20,48 +20,10 @@
 
 <div class="wrapper">
   <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <!--Пользователи-->
     <li [ngbNavItem]="1">
       <a ngbNavLink>Пользователи</a>
       <ng-template ngbNavContent>
-
-<!--        <gui-grid [columns]="columnsUsers"-->
-<!--                  [source]="usersList"-->
-<!--                  [searching]="searching">-->
-<!--        </gui-grid>-->
-
-
-        <gui-grid [source]="usersList"
-                  [searching]="searching"
-                  [columnMenu]="columnMenu"
-                  [sorting]="sorting">
-
-          <gui-grid-column header="#" width="60">
-            <ng-template let-index="index">
-              #{{index+1}}
-            </ng-template>
-          </gui-grid-column>
-
-          <gui-grid-column header="Фамилия" field="user_second_name">
-            <ng-template let-value="value">
-              {{value}}
-            </ng-template>
-          </gui-grid-column>
-
-          <gui-grid-column header="Имя" field="user_first_name" >
-            <ng-template let-value="value">
-              <i>{{value}}</i>
-            </ng-template>
-          </gui-grid-column>
-
-          <gui-grid-column header="Actions" width="200">
-            <ng-template let-item="item">
-              <button mat-stroked-button (click)="showDetails(item)">Details</button>
-              <button mat-stroked-button (click)="remove(item)">Remove</button>
-            </ng-template>
-          </gui-grid-column>
-
-        </gui-grid>
-
         <table class="users table table-striped">
           <thead>
             <tr>
@@ -104,19 +66,20 @@
         </table>
       </ng-template>
     </li>
+    <!--Студенты-->
     <li [ngbNavItem]="2">
       <a ngbNavLink>Студенты</a>
       <ng-template ngbNavContent>
         <div>
-          <label for="institute">Выберите группу</label>
-          <ng-select   (change)="filterStudentsByGroupId(groupId)"
-                      [(ngModel)]="groupId"
-                      [items] = "groupsList"
-                      bindLabel="group_name"
-                      bindValue="group_id"
-                      name="group"
-                      placeholder="Группа">
-          </ng-select>
+<!--          <label for="institute">Выберите группу</label>-->
+<!--          <ng-select   (change)="filterStudentsByGroupId(groupId)"-->
+<!--                      [(ngModel)]="groupId"-->
+<!--                      [items] = "groupsList"-->
+<!--                      bindLabel="group_name"-->
+<!--                      bindValue="group_id"-->
+<!--                      name="group"-->
+<!--                      placeholder="Группа">-->
+<!--          </ng-select>-->
 
 
 <!--          <form class="form-inline">-->
@@ -165,47 +128,51 @@
         </table>
       </ng-template>
     </li>
+    <!--Специальности-->
     <li [ngbNavItem]="3">
       <a ngbNavLink>Специальности</a>
       <ng-template ngbNavContent>
         <div class="addButton">
-          <button class="add_button btn btn-primary btn-sm ms-3" (click)="open(addSpecialtyModal)">
+          <button class="add_button btn btn-primary btn-sm ms-3" (click)="handleAddAction()">
             <i class="fa fa-plus"></i>
           </button>
         </div>
-        <table class="users table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Специальность</th>
-              <th scope="col">Аббревиатура</th>
-              <th scope="col">Код</th>
-              <th scope="col">Действия</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let specialty of specialtiesList" class="users__user user">
-              <td> {{specialty.specialty_name_full}}</td>
-              <td contenteditable='true'> {{specialty.specialty_name}}</td>
-              <td> {{specialty.specialty_number}}</td>
-              <td>
-<!--                <div class="user__actions">-->
-<!--                  <button class="button" (click)="openEdit(editModal, specialty)">Редактировать</button>-->
-<!--                  <button class="user__delete button" (click)="deleteSpecialty(specialty.specialty_id)">Удалить</button>-->
-<!--                </div>-->
-                <div>
-                  <button class="me-2 btn btn-lg text-dark edit-button">
-                    <i class="icon-pencil" (click)="open(addSpecialtyModal1)"></i>
-                  </button>
-                  <button class="btn btn-lg text-dark delete-button" (click)="deleteSpecialty(specialty.specialty_id)">
-                    <i class="icon-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+
+        <table mat-table [dataSource]="specialties" class="mat-elevation-z8">
+          <ng-container matColumnDef="specialtyFullName">
+            <th mat-header-cell *matHeaderCellDef>Специальность</th>
+            <td mat-cell *matCellDef="let element">{{element.specialty_name_full}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="specialtyName">
+            <th mat-header-cell *matHeaderCellDef>Аббревиатура</th>
+            <td mat-cell *matCellDef="let element">{{element.specialty_name}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef>Код</th>
+            <td mat-cell *matCellDef="let element">{{element.specialty_number}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Действия</th>
+            <td mat-cell *matCellDef="let element" class="mat-action-list">
+              <button mat-icon-button color="primary" matTooltip="Редактировать" (click)="handleEditAction(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Удалить" (click)="handleDeleteAction(element)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="specialtyColumns; sticky:true"></tr>
+          <tr mat-row *matRowDef="let row; columns: specialtyColumns"></tr>
         </table>
+
       </ng-template>
     </li>
+    <!--Группы-->
     <li [ngbNavItem]="4">
       <a ngbNavLink>Группы</a>
       <ng-template ngbNavContent>
@@ -214,6 +181,7 @@
             <i class="fa fa-plus"></i>
           </button>
         </div>
+
 
         <table class="table table-bordered table-responsive-md table-striped text-center" id="example" style="padding: 0.3rem">
           <thead>
@@ -225,7 +193,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let group of groupsList" class="users__user user">
-              <td style="padding: 0.3rem"> {{group.specialty_name}}</td>
+              <td style="padding: 0.3rem"> {{group.specialty.specialty_name}}</td>
               <td style="padding: 0.3rem"> {{group.group_name}}</td>
               <td style="padding: 0.3rem">
                 <div>
@@ -240,9 +208,9 @@
             </tr>
           </tbody>
         </table>
-
       </ng-template>
     </li>
+    <!--Дипломные руководители-->
     <li [ngbNavItem]="5">
       <a ngbNavLink>Дипломные руководители</a>
       <ng-template ngbNavContent>
@@ -267,6 +235,7 @@
         </table>
       </ng-template>
     </li>
+    <!--ГЭК-->
     <li [ngbNavItem]="6">
       <a ngbNavLink>ГЭК</a>
       <ng-template ngbNavContent>
@@ -297,6 +266,7 @@
         <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Добавить ГЭК</button>
       </ng-template>
     </li>
+    <!--Темы-->
     <li [ngbNavItem]="7">
       <a ngbNavLink>Темы</a>
       <ng-template ngbNavContent>
@@ -315,186 +285,28 @@
             <td> {{work.id_leader}}</td>
             <td> {{work.id_student}}</td>
             <td>
-              <div class="user__actions">
-                                  <button class="button">Редактировать</button>
-                                  <button class="user__delete button">Удалить</button>
-                                </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </ng-template>
-    </li>
-    <li [ngbNavItem]="8">
-      <a ngbNavLink>Таблица</a>
-      <ng-template ngbNavContent>
-
-
-        <mat-form-field class="example-form-field" appearance="fill">
-          <mat-label>Clearable input</mat-label>
-          <input matInput type="text" [(ngModel)]="value">
-          <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-
-
-        <form class="example-form">
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Favorite food</mat-label>
-            <input matInput placeholder="Ex. Pizza" value="Sushi">
-          </mat-form-field>
-
-        </form>
-
-        <table class="users table table-striped">
-          <thead>
-          <tr>
-            <th scope="col">Фамилия</th>
-            <th scope="col">Имя</th>
-            <th scope="col">Отчество</th>
-            <th scope="col">Роли</th>
-            <th scope="col">Действия</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let user of users" class="users__user user">
-            <td> {{user.user_second_name}}</td>
-            <td> {{user.user_first_name}}</td>
-            <td> {{user.user_middle_name}}</td>
-            <td></td>
-            <td>
-              <div>
+              '<div>
                 <button class="me-2 btn btn-lg text-dark edit-button">
-                  <i class="icon-pencil" (click)="openDialog()"></i>
+                  <i class="icon-pencil"></i>
                 </button>
                 <button class="btn btn-lg text-dark delete-button">
                   <i class="icon-trash"></i>
                 </button>
-              </div>
+              </div>'
             </td>
           </tr>
           </tbody>
         </table>
       </ng-template>
     </li>
-    <li [ngbNavItem]="9">
-      <a ngbNavLink>Пример</a>
-      <ng-template ngbNavContent>
-        <gui-grid #grid
-                  id="agile-grid"
-                  [theme]="'generic'"
-                  [source]="source"
-                  [rowColoring]="'none'"
-                  [sorting]="sorting"
-                  [paging]="false"
-                  [columnMenu]="columnMenu"
-                  [verticalGrid]="false"
-                  [horizontalGrid]="true"
-                  [cellEditing]="true"
-                  [rowHeight]="70"
-                  [rowSelection]="rowSelection"
-                  [summaries]="summaries"
-                  [loading]="loading"
-                  [infoPanel]="false">
-
-          <gui-grid-column header="Name" type="string" width="250"
-                           [sorting]="columnSorting" [cellEditing]="false" [matcher]="columnMatcher">
-            <ng-template let-value="value" let-index="index" let-item="item">
-
-			<span class="gui-user-wrapper">
-				<img src="{{item.avatar}}" class="gui-user-img" />
-			</span>
-
-              <div class="gui-user-info" >
-                <span class="gui-user-info-name" >{{item.name}}</span>
-                <span class="gui-user-info-position" >{{item.position}}</span>
-              </div>
-
-            </ng-template>
-          </gui-grid-column>
-
-          <gui-grid-column header="Company" [field]="'company'" type="string" view="text"
-                           [cellEditing]="true">
-          </gui-grid-column>
-
-          <gui-grid-column header="Rating" field="rating" type="number" width="100"
-                           [cellEditing]="true">
-          </gui-grid-column>
-
-          <gui-grid-column header="Mobile" field="mobile" type="string" view="italic"
-                           [enabled]="false"
-                           [cellEditing]="false" align="right">
-          </gui-grid-column>
-
-          <gui-grid-column header="Status" field="status" type="string" width="160" sorting="false"
-                           [cellEditing]="false" >
-            <ng-template let-value="value" let-item="item">
-
-              <gui-select [options]="[{value: 'Active'}, {value: 'Inactive'}]"
-                          [selected]="{value: value}"
-                          [width]="60">
-              </gui-select>
-
-            </ng-template>
-          </gui-grid-column>
-
-          <gui-grid-column header="Training" field="training" type="number" view="bar" width="140"
-                           [summaries]="budgetSummaries"
-                           [cellEditing]="true" >
-          </gui-grid-column>
-
-          <gui-grid-column header="Budget" field="budget" type="number" width="150"
-                           [summaries]="trainingSummaries"
-                           [cellEditing]="true" >
-            <ng-template let-value="value">
-
-              <ng-container *ngIf="value > 0">
-                <div class="gui-align-right gui-budget" style="color: #268e28">$ {{value}}.00</div>
-              </ng-container>
-
-              <ng-container *ngIf="value === 0">
-                <div class="gui-align-right gui-budget" style="color: #0747a6">$ {{value}}.00</div>
-              </ng-container>
-
-              <ng-container *ngIf="value < 0">
-                <div class="gui-align-right gui-budget" style="color: #951f1d">$ {{value}}.00</div>
-              </ng-container>
-
-            </ng-template>
-          </gui-grid-column>
-
-          <gui-grid-column [cellEditing]="false" [sorting]="false" width="60" >
-            <ng-template let-value="value" let-item="item">
-
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="showDetails(item)">
-                  <mat-icon>info</mat-icon>
-                  <span>Show details</span>
-                </button>
-                <button mat-menu-item disabled>
-                  <mat-icon>edit</mat-icon>
-                  <span>Edit</span>
-                </button>
-                <button mat-menu-item (click)="remove(item.id)">
-                  <mat-icon>delete</mat-icon>
-                  <span>Remove</span>
-                </button>
-              </mat-menu>
-
-            </ng-template>
-          </gui-grid-column>
-
-        </gui-grid>
 
 
-      </ng-template>
-    </li>
   </ul>
   <div [ngbNavOutlet]="nav"></div>
+
+
+
+
 
   <ng-template #addGroupModal let-modal>
     <div class="modal-header">

@@ -22,19 +22,26 @@ import { LectorComponent } from './components/registration/lector/lector.compone
 import { LectorCabinetComponent } from './components/cabinet/lector/lector-cabinet/lector-cabinet.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
-  DialogOverviewExampleDialog,
   HeadOfDepartmentComponent
 } from './components/cabinet/head-of-department/head-of-department.component';
 import { AddRoleComponent } from './components/role/add-role/add-role.component';
 import { RoleDetailsComponent } from './components/role/role-details/role-details.component';
-import { RolesListComponent } from './components/role/roles-list/roles-list.component';
-import { TableComponent } from './components/table/table.component';
+import {Dialog, RolesListComponent} from './components/role/roles-list/roles-list.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatButtonModule} from "@angular/material/button";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from '@angular/material/icon';
+import {MatTableModule} from "@angular/material/table";
+import {DialogOverviewDialog} from "./components/role/dial/dialog-overview-dialog.component";
+import {MatSelectModule} from "@angular/material/select";
+import { EditGroupComponent } from './components/role/edit-group/edit-group.component';
+import {MatGridListModule} from "@angular/material/grid-list";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatCardModule} from "@angular/material/card";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import { SpecialtyComponent } from './components/dialog/specialty/specialty.component';
 
 const appRoutes: Routes = [
   {path: '', component:MainComponent},
@@ -65,26 +72,34 @@ const appRoutes: Routes = [
     AddRoleComponent,
     RoleDetailsComponent,
     RolesListComponent,
-    TableComponent,
-    DialogOverviewExampleDialog
+    DialogOverviewDialog,
+    Dialog,
+    EditGroupComponent,
+    SpecialtyComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        RouterModule.forRoot(appRoutes),
-        HttpClientModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NgSelectModule,
-        NgbModule,
-        GuiGridModule,
-        BrowserAnimationsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatInputModule,
-        MatIconModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    RouterModule.forRoot(appRoutes),
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgSelectModule,
+    NgbModule,
+    GuiGridModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
+    MatTableModule,
+    MatSelectModule,
+    MatGridListModule,
+    MatTooltipModule,
+    MatCardModule,
+    MatToolbarModule
+  ],
   providers: [RoleGuard],
   bootstrap: [AppComponent]
 })

@@ -4,26 +4,6 @@ const Role = db.roles;
 const { Op } = require('@sequelize/core');
 const {Sequelize} = require("@sequelize/core");
 
-// create and save user
-// exports.createUser = (roleId, user) => {
-//     return User.create({
-//         // TODO: Validate request
-//         user_login: user.user_login,
-//         user_password: user.user_password,
-//         user_first_name: user.user_first_name,
-//         user_second_name: user.user_second_name,
-//         user_middle_name: user.user_middle_name,
-//         user_confirm: user.user_confirm,
-//         role_id: roleId,
-//     })
-//         .then((user) => {
-//             console.log(">> Created user: " + JSON.stringify(user, null, 4));
-//             return user;
-//         })
-//         .catch((err) => {
-//             console.log(">> Error while creating user: ", err);
-//         });
-// };
 
 exports.createUser = (req, res) => {
     const user = {
@@ -88,5 +68,8 @@ exports.findAllUsers = (req, res) => {
     //     return users;
     // });
 };
+
+
+
 
 
