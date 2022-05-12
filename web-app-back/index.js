@@ -20,6 +20,7 @@ const studentRouter = require('./routes/student.routes');
 const specialtyRouter = require('./routes/specialty.routes');
 const universityRouter = require('./routes/university.routes');
 const departmentRouter = require('./routes/department.routes');
+const lectorRouter = require('./routes/lectors.routes');
 
 app.use(cors());
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use('/api/roles', roleRouter);
 app.use('/specialty', specialtyRouter);
 app.use('/university', universityRouter);
 app.use('/department', departmentRouter);
+app.use('/lector', lectorRouter);
 
 //
 // const db = require("./models/sequelize");
@@ -119,6 +121,7 @@ app.get('/students/:leaderId', async (req, res) => {
 
 
 // LECTORS
+/*
 const ALL_INFO_LECTORS_BY_CATHEDRA = `SELECT vacancy, busy_place, position, user_second_name, user_first_name, user_middle_name 
   FROM lectors JOIN users ON users.user_id = lectors.user_id WHERE lectors.cathedra_id = $1`
 
@@ -131,6 +134,8 @@ app.get('/lectors-info/:cathedraId', async (req, res) => {
     console.log(error.message)
   }
 });
+
+ */
 
 
 // UNIVERSITY

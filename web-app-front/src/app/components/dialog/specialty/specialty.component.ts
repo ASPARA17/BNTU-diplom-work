@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {DepartmentService} from "../../../services/department/department.service";
-import {SpecialtyService} from "../../../services/specialty/specialty.service";
+import {DepartmentService} from "../../../services/university-structure/department/department.service";
+import {SpecialtyService} from "../../../services/university-structure/specialty/specialty.service";
 
 @Component({
   selector: 'app-specialty',

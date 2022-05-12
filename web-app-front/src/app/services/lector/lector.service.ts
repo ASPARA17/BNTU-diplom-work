@@ -8,7 +8,9 @@ import {
 import {
   Router
 } from '@angular/router';
+import {Observable} from "rxjs";
 
+const baseUrl = 'http://localhost:5000/lector';
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +25,11 @@ export class LectorService {
       headers: token
     }).toPromise();
     return students
+  }
+
+  getAll(): Observable<any> {
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    return this.http.get(`${baseUrl}/`, {headers: token})
   }
 
 

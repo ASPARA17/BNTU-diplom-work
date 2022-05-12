@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import * as _ from 'lodash';
@@ -25,11 +25,8 @@ export class GroupService {
   }
 
   getAllByCathedraId(cathedraId): Observable<any> {
-    return this.http.get(`${baseUrl}/all/${cathedraId}`)
-  }
-
-  getGroupById(id): Observable<any> {
-    return this.http.get(`${baseUrl}/${id}`);
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    return this.http.get(`${baseUrl}/all/${cathedraId}`, {headers: token});
   }
 
   update(group): Observable<any> {
@@ -39,25 +36,5 @@ export class GroupService {
   // update(id, group): Observable<any> {
   //   return this.http.put(`${baseUrl}/${id}`, group);
   // }
-
-  //TEST
-
-  form: FormGroup = new FormGroup({
-    $key: new FormControl(null),
-    groupName: new FormControl('', Validators.required),
-    specialty: new FormControl(0)
-  });
-
-  populateForm(group) {
-    this.form.setValue(_.omit(group,'specialty'));
-  }
-
-  initializeFormGroup() {
-    this.form.setValue({
-      $key: null,
-      groupName: '',
-      specialty: 0
-    });
-  }
 
 }

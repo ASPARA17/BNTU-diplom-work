@@ -42,6 +42,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCardModule} from "@angular/material/card";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import { SpecialtyComponent } from './components/dialog/specialty/specialty.component';
+import { GroupComponent } from './components/dialog/group/group.component';
+import { LectorsComponent } from './components/dialog/lectors/lectors.component';
 
 const appRoutes: Routes = [
   {path: '', component:MainComponent},
@@ -75,7 +77,9 @@ const appRoutes: Routes = [
     DialogOverviewDialog,
     Dialog,
     EditGroupComponent,
-    SpecialtyComponent
+    SpecialtyComponent,
+    GroupComponent,
+    LectorsComponent
   ],
   imports: [
     BrowserModule,

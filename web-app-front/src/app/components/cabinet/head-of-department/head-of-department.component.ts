@@ -21,32 +21,13 @@ import {
   GuiSearching,
   GuiSorting,
 } from "@generic-ui/ngx-grid";
-import {GroupService} from "../../../services/group/group.service";
+import {GroupService} from "../../../services/university-structure/group/group.service";
 import {MatTableDataSource} from "@angular/material/table";
-import {SpecialtyService} from "../../../services/specialty/specialty.service";
-import {EditGroupComponent} from "../../role/edit-group/edit-group.component";
+import {SpecialtyService} from "../../../services/university-structure/specialty/specialty.service";
 import {SpecialtyComponent} from "../../dialog/specialty/specialty.component";
+import {GroupComponent} from "../../dialog/group/group.component";
+import {LectorService} from "../../../services/lector/lector.service";
 
-
-export interface DialogData {
-  animal: string;
-  name: string;
-}
-
-const GROUP_INFO = [
-  {"specialty": {
-    "specialty_name": "jdiwj"
-    }, "group_name": "45588"},
-  {"specialty": {
-      "specialty_name": "ijinnin"
-    }, "group_name": "788787"},
-];
-
-const GROUP_SCHEMA = {
-  "specialty.specialty_name": "text",
-  "group_name": "text",
-  "isEdit": "isEdit"
-}
 
 @Component({
   selector: 'app-head-of-department',
@@ -57,8 +38,12 @@ export class HeadOfDepartmentComponent implements OnInit {
   specialtyColumns: string[] = ['specialtyFullName', 'specialtyName', 'code','action'];
   specialties: any;
 
+  groupColumns: string[] = ['specialtyName', 'groupName', 'action'];
+  groups: any;
 
-  [x: string]: any;
+  lectorsColumns: string[] = ['lectorName', 'position', 'allPlace', 'busyPlace','action'];
+  lectors: any;
+
 
   users: any;
   user = {
@@ -82,12 +67,12 @@ export class HeadOfDepartmentComponent implements OnInit {
   roles = [{ id: '1', name: 'Студент' }, {id: '3', name: 'Секретарь'}, {id: '4', name: 'Преподаватель'},
     {id: '5', name: 'Заведующий кафедры'}];
   vacancies = [1, 2, 3, 4, 5, 6, 7, 8];
-  lectorsList;
+  //lectorsList;
   specialtiesList;
   groupsList: Group[] = [];
 
   //example
-  groups: Group[] = [];
+  //groups: Group[] = [];
 
   animal: string;
   name: string;
@@ -108,17 +93,17 @@ export class HeadOfDepartmentComponent implements OnInit {
               private diplomWork: DiplomWorkService,
               public dialog: MatDialog,
               private groupService: GroupService,
-              private specialtyService: SpecialtyService) { }
+              private specialtyService: SpecialtyService,
+              private lectorService: LectorService) { }
 
   async ngOnInit(): Promise<void> {
-    await this.getAllInfoLectors();
+    //await this.getAllInfoLectors();
     await this.getInfoLStudents();
     await this.getAllUsersFromCathedra();
     await this.getAllSpecialtiesFromCathedra();
     //await this.getGroupsFromCathedra();
     await this.getNewGroups();
     await this.getAllDiplomWorks();
-    //await this.retrieveUsers();
 
     //example
     // this.restService.getGroups().subscribe((response) => {
@@ -129,12 +114,15 @@ export class HeadOfDepartmentComponent implements OnInit {
     //let dataSource = this.groupsList;
 
     this.specialtyTableData();
+    this.groupTableData();
+    this.lectorsTableData();
   }
 
   specialtyTableData() {
     this.specialtyService.getAllByCathedraId(this.currentCathedraId).
       subscribe((response: any) => {
       this.specialties = new MatTableDataSource(response);
+      console.log(this.specialties)
     }, (error: any)=>{
       console.log(error);
     });
@@ -166,39 +154,31 @@ export class HeadOfDepartmentComponent implements OnInit {
     this.router.events.subscribe(()=>{
       dialogRef.close();
     })
-    const sub = dialogRef.componentInstance.onEditSpecialty.subscribe((response)=> {
+    const sub = dialogRef.componentInstance.onAddSpecialty.subscribe((response)=> {
       this.specialtyTableData();
     })
   }
 
   handleDeleteAction(values:any) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      message:'delete ' + values.specialty_name
-    };
-    const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-    const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{
-      this.ngxService.start();
-      this.deleteSpecialty(values.specialty_id);
-      dialogRef.close()
-    })
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.data = {
+    //   message:'delete ' + values.specialty_name
+    // };
+    // модальное окно, о предупреждении
+    // const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
+    // const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response)=>{
+    //   this.ngxService.start();
+    //   this.deleteSpecialty(values.specialty_id);
+    //   dialogRef.close()
+    // })
+
+    this.specialtyService.delete(values.specialty_id).subscribe((response: any) => {
+      this.specialtyTableData();
+    }, (error: any)=>{
+      console.log(error);
+    });
+
   }
-
-
-
-
-  onCreate() {
-    //this.dialog.open();
-  }
-
-  loadTemplate(group) {
-    if (this.groupUser && this.groupUser.group_id === group.group_id) {
-      return this.editTemplate;
-    } else {
-      return this.readOnlyTemplate;
-    }
-  }
-
 
 
   async retrieveUsers() {
@@ -227,7 +207,7 @@ export class HeadOfDepartmentComponent implements OnInit {
         });
   }
 
-
+/*
   updateGroup(): void {
     const data = {
       group_name: 'myTest',
@@ -242,15 +222,15 @@ export class HeadOfDepartmentComponent implements OnInit {
         error => {
           console.log(error);
         });
-  }
+  }*/
 
   open(content): void {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
   }
-
+/*
   async getSec(){
     this.sec = await this.secretary.getSec()
-  }
+  }*/
 
   async getAllDiplomWorks() {
     console.log("all diplom work")
@@ -274,11 +254,14 @@ export class HeadOfDepartmentComponent implements OnInit {
     this.listOfUsers.sort((a, b) => (a.user_first_name > b.user_first_name) ? 1 : -1)
   }
 
-
+/*
   async getAllInfoLectors() {
     this.lectorsList = await this.headOfDepartment.getInfoLectors(this.userInfo.cathedra_id)
     this.lectorsList.sort((a, b) => (a.user_second_name > b.user_second_name) ? 1 : -1)
   }
+
+ */
+  radius: any;
 
   async getInfoLStudents() {
     this.studentsList = await this.headOfDepartment.getInfoStudentsByCathedra(this.userInfo.cathedra_id)
@@ -342,6 +325,63 @@ export class HeadOfDepartmentComponent implements OnInit {
 
   }
 
+  groupTableData() {
+    this.groupService.getAllByCathedraId(this.currentCathedraId).
+    subscribe((response: any) => {
+      this.groups = new MatTableDataSource(response);
+      console.log(this.groups)
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  handleAddGroup() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Add'
+    }
+    dialogConfig.width = "750px";
+    const dialogRef = this.dialog.open(GroupComponent, dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onAddGroup.subscribe((response)=> {
+      this.groupTableData();
+    })
+  }
+
+  handleEditGroup(values:any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Edit',
+      data: values
+    }
+    dialogConfig.width = "750px";
+    const dialogRef = this.dialog.open(GroupComponent, dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onEditGroup.subscribe((response)=> {
+      this.groupTableData();
+    })
+  }
+
+  handleDeleteGroup(values:any) {
+
+  }
+
+  lectorsTableData() {
+    this.lectorService.getAll().
+    subscribe((response: any) => {
+      this.lectors = new MatTableDataSource(response);
+      console.log(this.lectors)
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+
+
   async logoutUser() {
     console.log("Выйти");
     this.authService.logout();
@@ -352,18 +392,3 @@ export class HeadOfDepartmentComponent implements OnInit {
 
 }
 
-// @Component({
-//   selector: 'dialog-overview-example-dialog',
-//   templateUrl: 'dialog-overview-example-dialog.html',
-// })
-// export class DialogOverviewExampleDialog {
-//
-//   constructor(
-//     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-//     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-//
-//   onNoClick(): void {
-//     this.dialogRef.close();
-//   }
-//
-// }

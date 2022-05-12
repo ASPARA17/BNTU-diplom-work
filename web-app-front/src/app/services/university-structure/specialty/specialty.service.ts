@@ -30,4 +30,9 @@ export class SpecialtyService {
     return this.http.put(`${baseUrl}/`, specialty,{headers: token});
   }
 
+  delete(id): Observable<any> {
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    return this.http.delete(`${baseUrl}/${id}`, {headers: token});
+  }
+
 }
