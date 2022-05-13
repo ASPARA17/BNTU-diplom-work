@@ -28,6 +28,7 @@ import {SpecialtyComponent} from "../../dialog/specialty/specialty.component";
 import {GroupComponent} from "../../dialog/group/group.component";
 import {LectorService} from "../../../services/lector/lector.service";
 import {LectorsComponent} from "../../dialog/lectors/lectors.component";
+import {StudentsListComponent} from "../../dialog/students-list/students-list.component";
 
 
 @Component({
@@ -394,6 +395,22 @@ export class HeadOfDepartmentComponent implements OnInit {
     const sub = dialogRef.componentInstance.onEditLector.subscribe((response)=> {
       this.lectorsTableData();
     })
+  }
+
+  handleListStudentsAndTopicsAction(values:any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      data: values
+    }
+    dialogConfig.width = "1000px";
+    const dialogRef = this.dialog.open(StudentsListComponent, dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    /*
+    const sub = dialogRef.componentInstance.onEditSpecialty.subscribe((response)=> {
+      this.specialtyTableData();
+    })*/
   }
 
 

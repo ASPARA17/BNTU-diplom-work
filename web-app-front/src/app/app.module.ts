@@ -44,6 +44,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import { SpecialtyComponent } from './components/dialog/specialty/specialty.component';
 import { GroupComponent } from './components/dialog/group/group.component';
 import { LectorsComponent } from './components/dialog/lectors/lectors.component';
+import { StudentsListComponent } from './components/dialog/students-list/students-list.component';
 
 const appRoutes: Routes = [
   {path: '', component:MainComponent},
@@ -79,7 +80,8 @@ const appRoutes: Routes = [
     EditGroupComponent,
     SpecialtyComponent,
     GroupComponent,
-    LectorsComponent
+    LectorsComponent,
+    StudentsListComponent
   ],
   imports: [
     BrowserModule,

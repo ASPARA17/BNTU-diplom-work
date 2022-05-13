@@ -37,5 +37,10 @@ export class LectorService {
     return this.http.put(`${baseUrl}/place`, lector, {headers: token});
   }
 
+  getStudentsAndTopicsList(id): Observable<any> {
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    return this.http.get(`${baseUrl}/list_student/${id}`, {headers: token})
+  }
+
 
 }

@@ -36,17 +36,7 @@ export class LectorsComponent implements OnInit {
       this.action = "Обновить";
       this.lectorForm.patchValue(this.dialogData.data);
     }
-
-    //this.getSpecialties();
   }
-/*
-  getSpecialties() {
-    this.specialtyService.getAll().subscribe((response:any)=> {
-      this.specialties = response;
-    }, (error:any)=>{
-      console.log(error);
-    })
-  }*/
 
   handleSubmit() {
     if (this.dialogAction === 'Редактировать') {
@@ -58,18 +48,6 @@ export class LectorsComponent implements OnInit {
 
   add() {
     // TODO: dont need
-    /*
-    var formData = this.lectorForm.value;
-    var data = {
-      group_name:formData.group_name,
-      fk_specialty:formData.fk_specialty
-    }
-    this.groupService.create(data).subscribe((response:any)=>{
-      this.dialogRef.close();
-      this.onAddLector.emit();
-    },(error:any)=>{
-      console.log(error);
-    })*/
   }
 
   edit() {

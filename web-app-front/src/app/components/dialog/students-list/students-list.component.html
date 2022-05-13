@@ -1,0 +1,38 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span class="title-center">Список тем и студентов</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+<table mat-table [dataSource]="studentsAndTopics" class="mat-elevation-z8">
+  <ng-container matColumnDef="idList">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="topic">
+    <th mat-header-cell *matHeaderCellDef>Тема</th>
+    <td mat-cell *matCellDef="let element">{{element.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="group">
+    <th mat-header-cell *matHeaderCellDef>Группа</th>
+    <td mat-cell *matCellDef="let element">{{element.group_name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="studentName">
+    <th mat-header-cell *matHeaderCellDef>Студент</th>
+    <td mat-cell *matCellDef="let element">{{element.initials_student}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef>Действия</th>
+    <td mat-cell *matCellDef="let element" class="mat-action-list">
+
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="studentsAndTopicsColumns; sticky:true"></tr>
+  <tr mat-row *matRowDef="let row; columns: studentsAndTopicsColumns"></tr>
+</table>

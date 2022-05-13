@@ -1,0 +1,24 @@
+.mat-toolbar {
+  margin: -24px;
+  width: auto;
+  margin-bottom: 10px;
+}
+
+.title-center{
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+mat-form-field{
+  padding: 5px;
+  width: 100%;
+}
+table{
+  width: 100%;
+}
+
+th{
+  font: 400 14px/20px Roboto, "Helvetica Neue", sans-serif;
+  font-weight: bold;
+  color: black;
+}
