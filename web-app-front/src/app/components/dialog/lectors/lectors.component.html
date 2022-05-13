@@ -1,1 +1,45 @@
-<p>lectors works!</p>
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span class="title-center">{{dialogData.action}} Руководителя</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="lectorForm">
+    <div fxFlex fxLayout="column">
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Руководитель</mat-label>
+          <input matInput formControlName="initials_lector" readonly>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Должность</mat-label>
+          <input matInput formControlName="position" readonly>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Кол-во мест</mat-label>
+          <input matInput formControlName="vacancy" type="number">
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Занятые места</mat-label>
+          <input matInput formControlName="busy_place" readonly>
+        </mat-form-field>
+      </div>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-content align="center">
+  <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()">{{action}}</button>
+  <button  mat-raised-button color="primary" mat-dialog-close>Отмена</button>
+</mat-dialog-content>

@@ -32,5 +32,10 @@ export class LectorService {
     return this.http.get(`${baseUrl}/`, {headers: token})
   }
 
+  updatePlace(lector): Observable<any> {
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    return this.http.put(`${baseUrl}/place`, lector, {headers: token});
+  }
+
 
 }

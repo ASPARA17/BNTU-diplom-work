@@ -14,15 +14,15 @@
             <mat-option *ngFor="let specialty of specialties" [value]="specialty.specialty_id">{{specialty.specialty_name}}</mat-option>
           </mat-select>
         </mat-form-field>
-
       </div>
+
       <div fxLayout="row wrap">
         <mat-form-field appearance="fill" fxFlex>
           <mat-label>Группа</mat-label>
           <input matInput formControlName="group_name">
         </mat-form-field>
-
       </div>
+
     </div>
   </form>
 </mat-dialog-content>

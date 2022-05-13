@@ -214,26 +214,6 @@
     <li [ngbNavItem]="5">
       <a ngbNavLink>Дипломные руководители</a>
       <ng-template ngbNavContent>
-        <!--
-        <table class="users table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Преподаватель</th>
-              <th scope="col">Должность</th>
-              <th scope="col">Кол-во мест</th>
-              <th scope="col">Занятые места</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let lector of lectorsList" class="users__user user">
-              <td>{{lector.user_second_name}} </td>
-              <td>{{lector.position}}</td>
-              <td>{{lector.vacancy}}</td>
-              <td>{{lector.busy_place}}</td>
-            </tr>
-          </tbody>
-        </table> -->
 
         <table mat-table [dataSource]="lectors" class="mat-elevation-z8">
           <ng-container matColumnDef="lectorName">
@@ -247,21 +227,8 @@
           </ng-container>
 
           <ng-container matColumnDef="allPlace">
-<!--            <th mat-header-cell *matHeaderCellDef>Кол-во мест</th>-->
-<!--            <td mat-cell *matCellDef="let element">-->
-<!--              {{element.vacancy}}-->
-<!--            </td>-->
             <th mat-header-cell *matHeaderCellDef>Кол-во мест</th>
-            <td mat-cell *matCellDef="let element">
-                <mat-form-field class="example-ripple-form-field">
-                   <input matInput [(ngModel)]="element.vacancy" type="number">
-                </mat-form-field>
-            </td>
-
-<!--            <mat-form-field class="example-ripple-form-field">-->
-<!--              <input matInput [(ngModel)]="radius" type="number" placeholder="Radius">-->
-<!--            </mat-form-field>-->
-
+            <td mat-cell *matCellDef="let element">{{element.vacancy}}</td>
           </ng-container>
 
           <ng-container matColumnDef="busyPlace">
@@ -269,12 +236,15 @@
             <td mat-cell *matCellDef="let element">{{element.busy_place}}</td>
           </ng-container>
 
-
-
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef>Действия</th>
             <td mat-cell *matCellDef="let element" class="mat-action-list">
-
+              <button mat-icon-button color="primary" matTooltip="Редактировать" (click)="handleEditLector(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="Студенты">
+                <mat-icon>list</mat-icon>
+              </button>
             </td>
           </ng-container>
 

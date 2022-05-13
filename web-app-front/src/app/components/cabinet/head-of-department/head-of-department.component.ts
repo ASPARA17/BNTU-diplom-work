@@ -27,6 +27,7 @@ import {SpecialtyService} from "../../../services/university-structure/specialty
 import {SpecialtyComponent} from "../../dialog/specialty/specialty.component";
 import {GroupComponent} from "../../dialog/group/group.component";
 import {LectorService} from "../../../services/lector/lector.service";
+import {LectorsComponent} from "../../dialog/lectors/lectors.component";
 
 
 @Component({
@@ -261,7 +262,6 @@ export class HeadOfDepartmentComponent implements OnInit {
   }
 
  */
-  radius: any;
 
   async getInfoLStudents() {
     this.studentsList = await this.headOfDepartment.getInfoStudentsByCathedra(this.userInfo.cathedra_id)
@@ -378,6 +378,22 @@ export class HeadOfDepartmentComponent implements OnInit {
     }, (error: any)=>{
       console.log(error);
     });
+  }
+
+  handleEditLector(values:any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Редактировать',
+      data: values
+    }
+    dialogConfig.width = "400px";
+    const dialogRef = this.dialog.open(LectorsComponent, dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onEditLector.subscribe((response)=> {
+      this.lectorsTableData();
+    })
   }
 
 
