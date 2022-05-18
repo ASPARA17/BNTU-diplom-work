@@ -41,10 +41,14 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCardModule} from "@angular/material/card";
 import {MatToolbarModule} from "@angular/material/toolbar";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SpecialtyComponent } from './components/dialog/specialty/specialty.component';
 import { GroupComponent } from './components/dialog/group/group.component';
 import { LectorsComponent } from './components/dialog/lectors/lectors.component';
 import { StudentsListComponent } from './components/dialog/students-list/students-list.component';
+import { SecComponent } from './components/dialog/sec/sec.component';
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 const appRoutes: Routes = [
   {path: '', component:MainComponent},
@@ -81,32 +85,37 @@ const appRoutes: Routes = [
     SpecialtyComponent,
     GroupComponent,
     LectorsComponent,
-    StudentsListComponent
+    StudentsListComponent,
+    SecComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    RouterModule.forRoot(appRoutes),
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgSelectModule,
-    NgbModule,
-    GuiGridModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
-    MatTableModule,
-    MatSelectModule,
-    MatGridListModule,
-    MatTooltipModule,
-    MatCardModule,
-    MatToolbarModule
-  ],
-  providers: [RoleGuard],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        RouterModule.forRoot(appRoutes),
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgSelectModule,
+        NgbModule,
+        GuiGridModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatInputModule,
+        MatIconModule,
+        MatTableModule,
+        MatSelectModule,
+        MatGridListModule,
+        MatTooltipModule,
+        MatCardModule,
+        MatToolbarModule,
+        MatSnackBarModule,
+        MatDatepickerModule,
+        MatNativeDateModule
+    ],
+  providers: [RoleGuard,
+    MatDatepickerModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

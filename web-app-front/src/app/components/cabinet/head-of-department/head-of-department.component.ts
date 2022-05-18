@@ -11,16 +11,6 @@ import {Group} from "../../../models/group.model";
 import {RestService} from "../../../services/rest.service";
 import {UserService} from "../../../services/user/user.service";
 import {DiplomWorkService} from "../../../services/diplomWork/diplom-work.service";
-import {
-  GuiCellEdit,
-  GuiColumn, GuiColumnCellEditing,
-  GuiColumnMenu,
-  GuiLocalization,
-  GuiPaging,
-  GuiPagingDisplay,
-  GuiSearching,
-  GuiSorting,
-} from "@generic-ui/ngx-grid";
 import {GroupService} from "../../../services/university-structure/group/group.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {SpecialtyService} from "../../../services/university-structure/specialty/specialty.service";
@@ -29,6 +19,8 @@ import {GroupComponent} from "../../dialog/group/group.component";
 import {LectorService} from "../../../services/lector/lector.service";
 import {LectorsComponent} from "../../dialog/lectors/lectors.component";
 import {StudentsListComponent} from "../../dialog/students-list/students-list.component";
+import {SecService} from "../../../services/sec/sec.service";
+import {SecComponent} from "../../dialog/sec/sec.component";
 
 
 @Component({
@@ -46,6 +38,11 @@ export class HeadOfDepartmentComponent implements OnInit {
   lectorsColumns: string[] = ['lectorName', 'position', 'allPlace', 'busyPlace','action'];
   lectors: any;
 
+  secColumns: string[] = ['secNumber', 'dateStart', 'dateEnd', 'action'];
+  sec: any;
+
+  isEditSecOpen: any = true;
+  secData: any = {};
 
   users: any;
   user = {
@@ -80,7 +77,7 @@ export class HeadOfDepartmentComponent implements OnInit {
   name: string;
 
   allDiplomWorksList;
-  sec: any = [];
+  //sec: any = [];
 
 
   currentCathedraId:number = this.userInfo.cathedra_id;
@@ -96,7 +93,8 @@ export class HeadOfDepartmentComponent implements OnInit {
               public dialog: MatDialog,
               private groupService: GroupService,
               private specialtyService: SpecialtyService,
-              private lectorService: LectorService) { }
+              private lectorService: LectorService,
+              private secService:SecService) { }
 
   async ngOnInit(): Promise<void> {
     //await this.getAllInfoLectors();
@@ -118,6 +116,25 @@ export class HeadOfDepartmentComponent implements OnInit {
     this.specialtyTableData();
     this.groupTableData();
     this.lectorsTableData();
+    this.secTableData();
+  }
+
+  async openEditSec(id){
+    this.isEditSecOpen = !this.isEditSecOpen;
+    //this.secId = id;
+    //this.secData = await this.secService.getById(id)
+    this.getSecById(id)
+    console.log(this.secData)
+  }
+
+  getSecById(id:any) {
+    this.secService.getById(id).
+    subscribe((response: any) => {
+      this.secData = response
+      console.log(this.secData)
+    }, (error: any)=>{
+      console.log(error);
+    });
   }
 
   specialtyTableData() {
@@ -413,7 +430,15 @@ export class HeadOfDepartmentComponent implements OnInit {
     })*/
   }
 
-
+  secTableData() {
+    this.secService.getAll().
+    subscribe((response: any) => {
+      this.sec = new MatTableDataSource(response);
+      console.log(this.sec)
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
 
   async logoutUser() {
     console.log("Выйти");
@@ -423,5 +448,28 @@ export class HeadOfDepartmentComponent implements OnInit {
     return false;
   }
 
+  handleAddSec() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Добавить'
+    }
+    dialogConfig.width = "500px";
+    const dialogRef = this.dialog.open(SecComponent, dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onAddSec.subscribe((response)=> {
+      this.secTableData();
+    })
+  }
+
+  deleteSec(id:any) {
+    this.secService.delete(id).
+    subscribe((response: any) => {
+      this.secTableData();
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
 }
 

@@ -1,0 +1,44 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span class="title-center">{{dialogData.action}} ГЭК</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="secForm">
+    <div fxFlex fxLayout="column">
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Номер</mat-label>
+          <input matInput formControlName="sec_number">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Срок работы</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Дата начала" formControlName="sec_start_date">
+          <input matEndDate placeholder="Дата окончания" formControlName="sec_end_date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Учебный год</mat-label>
+          <mat-select formControlName="year_id">
+            <mat-option *ngFor="let year of years" [value]="year.year_id">{{year.year_start}} / {{year.year_end}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-content align="center">
+  <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()">{{action}}</button>
+  <button  mat-raised-button color="primary" mat-dialog-close>Отмена</button>
+</mat-dialog-content>

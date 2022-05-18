@@ -32,7 +32,7 @@ export class SecretaryService {
     }).toPromise();
     return data
   }
-
+/*
   async getSec() {
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
     const data = await this.http.get('http://localhost:5000/sec', {
@@ -40,7 +40,7 @@ export class SecretaryService {
     }).toPromise();
     return data
   }
-
+*/
   async deleteSec(id){
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
     await this.http.delete(`http://localhost:5000/sec/${id}`, {
@@ -182,7 +182,7 @@ export class SecretaryService {
     }).toPromise();
   }
 
-  
+
   async putSecEvent(address,selectedGroup,model,time, secId, students){
     const body = {address,selectedGroup,model,time, secId,students};
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
@@ -213,7 +213,7 @@ export class SecretaryService {
       headers: token
     }).toPromise();
   }
-  
+
   async getSecRoles(){
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
     const data = await this.http.get(`http://localhost:5000/sec-roles`, {
@@ -253,7 +253,7 @@ export class SecretaryService {
     }).toPromise();
   }
 
-  
+
   async getStudents(groupId){
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
     const data = await this.http.get(`http://localhost:5000/sec-students/${groupId}`, {
@@ -285,7 +285,7 @@ export class SecretaryService {
     }).toPromise();
     return data
   }
-  
+
   async getStudentsEvent(id){
     console.log(id)
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));

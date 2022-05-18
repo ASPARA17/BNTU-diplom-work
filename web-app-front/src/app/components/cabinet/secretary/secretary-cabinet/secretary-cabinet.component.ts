@@ -8,6 +8,12 @@ import {
 } from '@angular/forms';
 import {NgbDate,NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {RoleService} from "../../../../services/role.service";
+import {MatTableDataSource} from "@angular/material/table";
+import {SecService} from "../../../../services/sec/sec.service";
+import {SnackbarService} from "../../../../services/snackbar/snackbar.service";
+import {AuthService} from "../../../../services/auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-secretary-cabinet',
@@ -15,9 +21,13 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./secretary-cabinet.component.scss']
 })
 export class SecretaryCabinetComponent implements OnInit {
+  secColumns: string[] = ['secNumber', 'dateStart', 'dateEnd', 'action'];
+  sec: any;
+  responseMessage:any;
+
   userName = JSON.parse(localStorage.getItem('user'));
   active = 1;
-  sec: any = [];
+  //sec: any = [];
   years: any = [];
   selectedGroup:any = {};
   selectedYear: any = [];
@@ -53,18 +63,64 @@ export class SecretaryCabinetComponent implements OnInit {
     "secYear": new FormControl("", Validators.required),
   })
 
-  constructor(private modalService: NgbModal, private calendar: NgbCalendar, private secretary: SecretaryService) { 
+  constructor(private modalService: NgbModal,
+              private calendar: NgbCalendar,
+              private secretary: SecretaryService,
+              private docService:RoleService,
+              private secService:SecService,
+              private snackbarService:SnackbarService,
+              private authService: AuthService,
+              private router: Router) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
 
   ngOnInit(): void {
-    this.getSec()
+    //this.getSec()
     this.getCathedra()
     this.getYears();
     this.getSecRoles()
+
+    this.secTableData();
   }
-  
+
+  secTableData() {
+    this.secService.getAll().
+    subscribe((response: any) => {
+      this.sec = new MatTableDataSource(response);
+      console.log(this.sec)
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  // deleteSec(id:any) {
+  //   this.secService.delete(id).subscribe((response:any)=>{
+  //     //this.secTableData();
+  //     console.log(response)
+  //     this.responseMessage = response?.message;
+  //     this.snackbarService.openSnackBar(this.responseMessage, "success");
+  //   }, (error:any)=>{
+  //     console.log(error);
+  //     if (error.error?.message) {
+  //       this.responseMessage = error.error?.message;
+  //     }
+  //     else {
+  //       this.responseMessage = "BIG ERROR";
+  //     }
+  //     this.snackbarService.openSnackBar(this.responseMessage, "error")
+  //   })
+  // }
+
+  deleteSec(id:any) {
+    this.secService.delete(id).
+    subscribe((response: any) => {
+      this.secTableData();
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'})
   }
@@ -103,7 +159,7 @@ export class SecretaryCabinetComponent implements OnInit {
   async getYears(){
     this.years = await this.secretary.getYears()
   }
-
+/*
   async addSec(number,text){
     if(text){
       number += `-${text}`;
@@ -111,21 +167,21 @@ export class SecretaryCabinetComponent implements OnInit {
     await this.secretary.postSec(number,Object.values(this.fromDate).join('-'),Object.values(this.toDate).join('-'),this.selectedYear.year_id)
     this.selectedYear = ''
     await this.getSec()
-  }
-
+  }*/
+/*
   async getSec(){
     this.sec = await this.secretary.getSec()
-  }
-
+  }*/
+/*
   async deleteSec(id){
     await this.secretary.deleteSec(id)
     await this.getSec()
-  }
+  }*/
 
   async openEditSec(id){
     this.isEditOpen = !this.isEditOpen;
     this.secId = id;
-    this.secretaryData = await this.secretary.getSecById(id)
+    this.secretaryData = await this.secService.getById(id)
   }
 
   async getCathedra(){
@@ -172,11 +228,11 @@ export class SecretaryCabinetComponent implements OnInit {
     for await (let spec of this.secSpecialty){
       this.getGroup(spec.specialty_id)
     }
-    
+
   }
 
   async deleteSecSpecialty(specId){
-    await this.secretary.deleteSecSpecialty(this.secId,specId);  // удалять группы из sec_group и удалять юзеров из student_marks 
+    await this.secretary.deleteSecSpecialty(this.secId,specId);  // удалять группы из sec_group и удалять юзеров из student_marks
     for await(let group of this.secGroup){
       if(group.fk_specialty == specId){
         console.log('Delete Group by Id',group.group_id)
@@ -259,7 +315,7 @@ export class SecretaryCabinetComponent implements OnInit {
   editEvent(id){
     console.log(this.secEvent)
     this.event = {...this.secEvent.find(element => element.id_sec_event === id)}
-    const address =  this.event.address.split(',') 
+    const address =  this.event.address.split(',')
     this.event.address = address[0];
     this.event.corpus = address[1].slice(10);
     this.event.faculty = address[2].slice(13);
@@ -310,7 +366,7 @@ export class SecretaryCabinetComponent implements OnInit {
       const result = await this.secretary.getStudents(group.group_id);
       this.students.push(result)
     }
-   
+
     this.students = this.students.flat()
     this.students.sort((a,b) => a.user_id - b.user_id)
   }
@@ -322,7 +378,7 @@ export class SecretaryCabinetComponent implements OnInit {
 
   percentEditMode(){
     this.isPercentEditMode = !this.isPercentEditMode;
-    
+
   }
 
   saveStudent(student = {}){
@@ -354,5 +410,17 @@ export class SecretaryCabinetComponent implements OnInit {
     this.students = await this.secretary.getStudentsEvent(id);
   }
 
+  async getDoc(){
+    let data = "";
+    this.docService.getDoc(data);
+  }
+
+  async logoutUser() {
+    console.log("Выйти");
+    this.authService.logout();
+    // TODO: fix URL
+    this.router.navigateByUrl(`/login`);
+    return false;
+  }
 
 }

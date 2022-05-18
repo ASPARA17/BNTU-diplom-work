@@ -11,7 +11,6 @@ const verify = require('./verifyToken')
 dotenv.config();
 
 
-
 const groupRouter = require('./routes/group.routes');
 const diplomaRouter = require('./routes/diplom-work');
 const userRouter = require('./routes/user.routes');
@@ -21,6 +20,9 @@ const specialtyRouter = require('./routes/specialty.routes');
 const universityRouter = require('./routes/university.routes');
 const departmentRouter = require('./routes/department.routes');
 const lectorRouter = require('./routes/lectors.routes');
+const secRouter = require('./routes/sec.routes');
+const yearsOfStudyRouter = require('./routes/years-of-study.routes');
+const docRouter = require('./routes/doc-officegen');
 
 app.use(cors());
 app.use(express.json());
@@ -34,6 +36,9 @@ app.use('/specialty', specialtyRouter);
 app.use('/university', universityRouter);
 app.use('/department', departmentRouter);
 app.use('/lector', lectorRouter);
+app.use('/sec', secRouter);
+app.use('/year', yearsOfStudyRouter);
+app.use('/doc', docRouter);
 
 //
 // const db = require("./models/sequelize");
@@ -602,24 +607,24 @@ app.delete('/date/:id', verify, async(req, res) => {
   }
 })
 
-app.post('/sec', verify, async (req, res) => {
-  try {
-    const {number,start,end,year} = req.body;
-    await pool.query('INSERT INTO sec (sec_number,sec_start_date,sec_end_date,year_id) VALUES ($1,$2,$3,$4) RETURNING sec_id', [number,start,end,year])
-    res.json('date was posted')
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+// app.post('/sec', verify, async (req, res) => {
+//   try {
+//     const {number,start,end,year} = req.body;
+//     await pool.query('INSERT INTO sec (sec_number,sec_start_date,sec_end_date,year_id) VALUES ($1,$2,$3,$4) RETURNING sec_id', [number,start,end,year])
+//     res.json('date was posted')
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// })
 
-app.get('/sec', verify, async (req, res) => {
-  try {
-    const sec = await pool.query('SELECT * FROM sec')
-    res.json(sec.rows)
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+// app.get('/sec', verify, async (req, res) => {
+//   try {
+//     const sec = await pool.query('SELECT * FROM sec')
+//     res.json(sec.rows)
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// })
 
 app.delete('/sec/:id', verify, async (req, res) => {
   try {
@@ -631,15 +636,15 @@ app.delete('/sec/:id', verify, async (req, res) => {
   }
 })
 
-app.get('/sec/:id', verify, async (req, res) => {
-  try {
-    const id = req.params.id
-    const sec = await pool.query('SELECT * FROM sec NATURAL INNER JOIN years_of_study WHERE sec_id = $1',[id])
-    res.json(sec.rows[0])
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+// app.get('/sec/:id', verify, async (req, res) => {
+//   try {
+//     const id = req.params.id
+//     const sec = await pool.query('SELECT * FROM sec NATURAL INNER JOIN years_of_study WHERE sec_id = $1',[id])
+//     res.json(sec.rows[0])
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// })
 
 app.get('/sec-cathedra', verify, async (req, res) => {
   try {
