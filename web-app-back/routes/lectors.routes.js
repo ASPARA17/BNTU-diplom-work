@@ -4,7 +4,7 @@ const verify = require('../verifyToken')
 const pool = require("../config/db");
 
 
-const ALL_LECTORS = `SELECT lector_id, vacancy, busy_place, position, user_second_name, user_first_name, user_middle_name, 
+const ALL_LECTORS = `SELECT lector_id, vacancy, busy_place, position, lectors.user_id, user_second_name, user_first_name, user_middle_name, 
     user_second_name ||' '|| LEFT(user_first_name,1) || '.'|| LEFT(user_middle_name,1) || '.' initials_lector
   FROM lectors JOIN users ON users.user_id = lectors.user_id`
 

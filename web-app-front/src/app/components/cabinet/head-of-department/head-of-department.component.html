@@ -282,7 +282,8 @@
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef>Действия</th>
             <td mat-cell *matCellDef="let element" class="mat-action-list">
-              <button mat-icon-button color="primary" matTooltip="Редактировать" (click)="openEditSec(element.sec_id)">
+              <button mat-icon-button color="primary" matTooltip="Редактировать" (click)="openEditSec(element.sec_id);
+                  secUsersTableData()">
                 <mat-icon>edit</mat-icon>
               </button>
               <button mat-icon-button color="primary" matTooltip="Удалить" (click)="deleteSec(element.sec_id)">
@@ -635,33 +636,97 @@
     <button class="button" (click)="getStudents();open(eventModal);">Добавить прием</button>
   </div>
   <div class="wrapper">
-    <h2 class="title">Состав комиссии</h2>
-    <table class="users table table-striped">
-      <thead>
-      <tr>
-        <th scope="col">Фамилия</th>
-        <th scope="col">Имя</th>
-        <th scope="col">Отчество</th>
-        <th scope="col">Роль</th>
-        <th scope="col">Действия</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let i of secUsers" >
-        <td>{{i.firstname}}</td>
-        <td>{{i.lastname}}</td>
-        <td>{{i.middlename}}</td>
-        <td>{{i.name}}</td>
-        <td>
-          <div class="user__role role">
-            <button class="button" (click)="editSecUser(i.id_sec_user); open(editSecUserModal)">Редактировать</button>
-            <button class="user__delete button" (click)="deleteSecUser(i.id_sec_user)">Удалить</button>
+    <h2 class="title">Состав комиссии
+      <button mat-icon-button color="primary" matTooltip="Добавить члена комисии" (click)="handleAddSecUser()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </h2>
+<!--    <table class="users table table-striped">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th scope="col">Фамилия</th>-->
+<!--        <th scope="col">Имя</th>-->
+<!--        <th scope="col">Отчество</th>-->
+<!--        <th scope="col">Роль</th>-->
+<!--        <th scope="col">Действия</th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <tr *ngFor="let i of secUsers" >-->
+<!--        <td>{{i.firstname}}</td>-->
+<!--        <td>{{i.lastname}}</td>-->
+<!--        <td>{{i.middlename}}</td>-->
+<!--        <td>{{i.name}}</td>-->
+<!--        <td>-->
+<!--          <div class="user__role role">-->
+<!--            <button class="button" (click)="editSecUser(i.id_sec_user); open(editSecUserModal)">Редактировать</button>-->
+<!--            <button class="user__delete button" (click)="deleteSecUser(i.id_sec_user)">Удалить</button>-->
+<!--          </div>-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+
+
+    <table mat-table [dataSource]="secUsers" class="mat-elevation-z8">
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef>Фамилия</th>
+        <td mat-cell *matCellDef="let element">
+          <div *ngIf="element.user_second_name != null">
+            {{element.user_second_name}}
+          </div>
+          <div *ngIf="element.user_second_name == null">
+            {{element.lastname}}
           </div>
         </td>
-      </tr>
-      </tbody>
+<!--        <td mat-cell *matCellDef="let element">{{element.user_second_name}}</td>-->
+      </ng-container>
+
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef>Имя</th>
+        <td mat-cell *matCellDef="let element">
+          <div *ngIf="element.user_first_name != null">
+            {{element.user_first_name}}
+          </div>
+          <div *ngIf="element.user_first_name == null">
+            {{element.firstname}}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="middleName">
+        <th mat-header-cell *matHeaderCellDef>Отчество</th>
+        <td mat-cell *matCellDef="let element">
+          <div *ngIf="element.user_middle_name != null">
+            {{element.user_middle_name}}
+          </div>
+          <div *ngIf="element.user_middle_name == null">
+            {{element.middlename}}
+          </div>e
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Роль</th>
+        <td mat-cell *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Действия</th>
+        <td mat-cell *matCellDef="let element" class="mat-action-list">
+          <button mat-icon-button color="primary" matTooltip="Редактировать" (click)="handleEditSecUser(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" matTooltip="Удалить" (click)="deleteSecUser(element.id_sec_user)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="secUsersColumn; sticky:true"></tr>
+      <tr mat-row *matRowDef="let row; columns: secUsersColumn"></tr>
     </table>
-    <button class="button" (click)="open(secUsersAddModal);">Добавить участника комиссии</button>
+
   </div>
   <div class="wrapper__button">
     <button class="button" (click)="openEditSec(0)">Сохранить</button>
@@ -877,31 +942,6 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.close(); saveEvent(eventAddress.value ,eventCorpus.value,eventFaculty.value)">Добавить</button>
-      </div>
-    </div>
-  </ng-template>
-
-  <ng-template #secUsersAddModal let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Участник комиссии</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <label>Фамилия</label>
-      <input type="text" autocomplete="off" #firstName placeholder="Фамилия" name="firstName">
-      <label>Имя</label>
-      <input type="text" autocomplete="off" #lastName placeholder="Имя" name="lastName">
-      <label>Отчество</label>
-      <input type="text"  autocomplete="off" #middleName placeholder="Отчество" name="middleName">
-      <label>Роль</label>
-      <select [(ngModel)]="selectedSecRoles">
-        <option *ngFor="let obj of secRoles" [ngValue]="obj">{{obj.name}}</option>
-      </select>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close(); addSecUser(firstName.value, lastName.value, middleName.value)">Добавить</button>
       </div>
     </div>
   </ng-template>

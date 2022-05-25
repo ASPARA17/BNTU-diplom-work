@@ -19,8 +19,11 @@ import {GroupComponent} from "../../dialog/group/group.component";
 import {LectorService} from "../../../services/lector/lector.service";
 import {LectorsComponent} from "../../dialog/lectors/lectors.component";
 import {StudentsListComponent} from "../../dialog/students-list/students-list.component";
-import {SecService} from "../../../services/sec/sec.service";
+import {SecService} from "../../../services/sec-structure/sec/sec.service";
 import {SecComponent} from "../../dialog/sec/sec.component";
+import {SecUserService} from "../../../services/sec-structure/sec-user/sec-user.service";
+import {SecUserComponent} from "../../dialog/sec-user/sec-user.component";
+import {userInfo} from "os";
 
 
 @Component({
@@ -43,6 +46,11 @@ export class HeadOfDepartmentComponent implements OnInit {
 
   isEditSecOpen: any = true;
   secData: any = {};
+
+  secUsersColumn: string[] = ['lastName', 'firstName', 'middleName', 'role', 'action'];
+  secUsers: any;
+
+  editedSecId: any;
 
   users: any;
   user = {
@@ -94,7 +102,8 @@ export class HeadOfDepartmentComponent implements OnInit {
               private groupService: GroupService,
               private specialtyService: SpecialtyService,
               private lectorService: LectorService,
-              private secService:SecService) { }
+              private secService:SecService,
+              private secUserService:SecUserService) { }
 
   async ngOnInit(): Promise<void> {
     //await this.getAllInfoLectors();
@@ -119,8 +128,27 @@ export class HeadOfDepartmentComponent implements OnInit {
     this.secTableData();
   }
 
+  deleteSecUser(id) {
+    this.secUserService.delete(id).
+    subscribe((response: any) => {
+      this.secUsersTableData();
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  secUsersTableData() {
+    this.secUserService.getAllBySecId(this.editedSecId).
+    subscribe((response: any) => {
+      this.secUsers = new MatTableDataSource(response);
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
   async openEditSec(id){
     this.isEditSecOpen = !this.isEditSecOpen;
+    this.editedSecId = id;
     //this.secId = id;
     //this.secData = await this.secService.getById(id)
     this.getSecById(id)
@@ -471,5 +499,38 @@ export class HeadOfDepartmentComponent implements OnInit {
       console.log(error);
     });
   }
+
+  handleEditSecUser(values:any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Редактировать',
+      data: values
+    }
+    dialogConfig.width = "750px";
+    const dialogRef = this.dialog.open(SecUserComponent, dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onEditSecUser.subscribe((response)=> {
+      this.secUsersTableData();
+    })
+  }
+
+  handleAddSecUser() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      action: 'Добавить',
+      secId: this.editedSecId
+    }
+    dialogConfig.width = "750px";
+    const dialogRef = this.dialog.open(SecUserComponent, dialogConfig);
+    this.router.events.subscribe(()=>{
+      dialogRef.close();
+    })
+    const sub = dialogRef.componentInstance.onAddSecUser.subscribe((response)=> {
+      this.secUsersTableData();
+    })
+  }
+
 }
 

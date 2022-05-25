@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {SpecialtyService} from "../../../services/university-structure/specialty/specialty.service";
-import {GroupService} from "../../../services/university-structure/group/group.service";
 import {YearService} from "../../../services/year/year.service";
-import {SecService} from "../../../services/sec/sec.service";
+import {SecService} from "../../../services/sec-structure/sec/sec.service";
 
 @Component({
   selector: 'app-sec',

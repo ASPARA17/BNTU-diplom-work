@@ -10,10 +10,11 @@ import {NgbDate,NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {RoleService} from "../../../../services/role.service";
 import {MatTableDataSource} from "@angular/material/table";
-import {SecService} from "../../../../services/sec/sec.service";
+import {SecService} from "../../../../services/sec-structure/sec/sec.service";
 import {SnackbarService} from "../../../../services/snackbar/snackbar.service";
 import {AuthService} from "../../../../services/auth/auth.service";
 import {Router} from "@angular/router";
+import {SecUserService} from "../../../../services/sec-structure/sec-user/sec-user.service";
 
 @Component({
   selector: 'app-secretary-cabinet',
@@ -24,6 +25,14 @@ export class SecretaryCabinetComponent implements OnInit {
   secColumns: string[] = ['secNumber', 'dateStart', 'dateEnd', 'action'];
   sec: any;
   responseMessage:any;
+  userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+  secUsersColumn: string[] = ['lastName', 'firstName', 'middleName', 'role', 'action'];
+  secUsers: any;
+
+  isEditSecOpen: any = true;
+  editedSecId: any;
+  secData: any = {};
 
   userName = JSON.parse(localStorage.getItem('user'));
   active = 1;
@@ -31,7 +40,7 @@ export class SecretaryCabinetComponent implements OnInit {
   years: any = [];
   selectedGroup:any = {};
   selectedYear: any = [];
-  isEditOpen: any = true;
+
   secretaryData: any = {};
   specialtyData: any = {};
   groupData: any = {};
@@ -47,7 +56,7 @@ export class SecretaryCabinetComponent implements OnInit {
   event: any = [];
   secEvent: any = [];
   selectedSecRoles: any = [];
-  secUsers: any = [];
+  //secUsers: any = [];
   user: any = [];
   secRoles: any = [];
   fromDate: NgbDate;
@@ -59,10 +68,6 @@ export class SecretaryCabinetComponent implements OnInit {
   model: NgbDateStruct;
   date: {year: number, month: number, day: number};
 
-  secretaryForm:FormGroup = new FormGroup({
-    "secYear": new FormControl("", Validators.required),
-  })
-
   constructor(private modalService: NgbModal,
               private calendar: NgbCalendar,
               private secretary: SecretaryService,
@@ -70,7 +75,8 @@ export class SecretaryCabinetComponent implements OnInit {
               private secService:SecService,
               private snackbarService:SnackbarService,
               private authService: AuthService,
-              private router: Router) {
+              private router: Router,
+              private secUserService:SecUserService) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
@@ -82,10 +88,46 @@ export class SecretaryCabinetComponent implements OnInit {
     this.getSecRoles()
 
     this.secTableData();
+
+  }
+
+  deleteSecUser(id) {
+    this.secUserService.delete(id).
+    subscribe((response: any) => {
+      this.secUsersTableData();
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  secUsersTableData() {
+    this.secUserService.getAllBySecId(this.editedSecId).
+    subscribe((response: any) => {
+      this.secUsers = new MatTableDataSource(response);
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  async openEditSec(id){
+    this.isEditSecOpen = !this.isEditSecOpen;
+    this.editedSecId = id;
+    this.getSecById(id)
+    console.log(this.secData)
+  }
+
+  getSecById(id:any) {
+    this.secService.getById(id).
+    subscribe((response: any) => {
+      this.secData = response
+      console.log(this.secData)
+    }, (error: any)=>{
+      console.log(error);
+    });
   }
 
   secTableData() {
-    this.secService.getAll().
+    this.secService.getAllByUserId(this.userInfo.user_id).
     subscribe((response: any) => {
       this.sec = new MatTableDataSource(response);
       console.log(this.sec)
@@ -178,11 +220,11 @@ export class SecretaryCabinetComponent implements OnInit {
     await this.getSec()
   }*/
 
-  async openEditSec(id){
-    this.isEditOpen = !this.isEditOpen;
-    this.secId = id;
-    this.secretaryData = await this.secService.getById(id)
-  }
+  // async openEditSec(id){
+  //   this.isEditOpen = !this.isEditOpen;
+  //   this.secId = id;
+  //   this.secretaryData = await this.secService.getById(id)
+  // }
 
   async getCathedra(){
     this.cathedra = await this.secretary.getCathedra();
@@ -333,29 +375,29 @@ export class SecretaryCabinetComponent implements OnInit {
     console.log('Event',this.secRoles)
   }
 
-  async addSecUser(firstName, lastName, middleName){
-    await this.secretary.addSecUser(firstName, lastName, middleName, this.selectedSecRoles.id_sec_role ,this.secId);
-    await this.getSecUsers()
-  }
+  // async addSecUser(firstName, lastName, middleName){
+  //   await this.secretary.addSecUser(firstName, lastName, middleName, this.selectedSecRoles.id_sec_role ,this.secId);
+  //   await this.getSecUsers()
+  // }
 
-  async getSecUsers(){
-    this.secUsers = await this.secretary.getSecUsers(this.secId);
-    console.log('Users',this.secUsers)
-  }
+  // async getSecUsers(){
+  //   this.secUsers = await this.secretary.getSecUsers(this.secId);
+  //   console.log('Users',this.secUsers)
+  // }
 
-  async deleteSecUser(id){
-    await this.secretary.deleteSecUser(id);
-    await this.getSecUsers()
-  }
+  // async deleteSecUser(id){
+  //   await this.secretary.deleteSecUser(id);
+  //   await this.getSecUsers()
+  // }
 
-  async editSecUser(id){
-    this.user = this.secUsers.find(element => element.id_sec_user === id)
-  }
+  // async editSecUser(id){
+  //   this.user = this.secUsers.find(element => element.id_sec_user === id)
+  // }
 
-  async saveSecUser(firstName, lastName, middleName){
-    await this.secretary.saveSecUser(firstName, lastName, middleName, this.selectedSecRoles.id_sec_role , this.user.id_sec_user);
-    await this.getSecUsers()
-  }
+  // async saveSecUser(firstName, lastName, middleName){
+  //   await this.secretary.saveSecUser(firstName, lastName, middleName, this.selectedSecRoles.id_sec_role , this.user.id_sec_user);
+  //   await this.getSecUsers()
+  // }
 
   students: any = []
 

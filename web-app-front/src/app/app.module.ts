@@ -49,6 +49,7 @@ import { StudentsListComponent } from './components/dialog/students-list/student
 import { SecComponent } from './components/dialog/sec/sec.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { SecUserComponent } from './components/dialog/sec-user/sec-user.component';
 
 const appRoutes: Routes = [
   {path: '', component:MainComponent},
@@ -86,7 +87,8 @@ const appRoutes: Routes = [
     GroupComponent,
     LectorsComponent,
     StudentsListComponent,
-    SecComponent
+    SecComponent,
+    SecUserComponent
   ],
     imports: [
         BrowserModule,

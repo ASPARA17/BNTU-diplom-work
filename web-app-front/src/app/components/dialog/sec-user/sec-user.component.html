@@ -1,0 +1,59 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span class="title-center">{{dialogData.action}} члена комиссии</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="secUserForm">
+    <div fxFlex fxLayout="column">
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Имя</mat-label>
+          <input matInput formControlName="firstname">
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Фамилия</mat-label>
+          <input matInput formControlName="lastname">
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Отчество</mat-label>
+          <input matInput formControlName="middlename">
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Роль</mat-label>
+          <mat-select formControlName="id_sec_role">
+            <mat-option *ngFor="let role of secRoles" [value]="role.id_sec_role">{{role.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Член комисии</mat-label>
+          <mat-select formControlName="id_user">
+            <mat-option *ngFor="let lector of lectors" [value]="lector.user_id">
+              {{lector.user_second_name}} {{lector.user_first_name}} {{lector.user_middle_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-content align="center">
+  <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()">{{action}}</button>
+  <button  mat-raised-button color="primary" mat-dialog-close>Отмена</button>
+</mat-dialog-content>

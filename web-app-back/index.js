@@ -22,6 +22,8 @@ const departmentRouter = require('./routes/department.routes');
 const lectorRouter = require('./routes/lectors.routes');
 const secRouter = require('./routes/sec.routes');
 const yearsOfStudyRouter = require('./routes/years-of-study.routes');
+const secUserRouter = require('./routes/sec-user.routes')
+const secRoleRouter = require('./routes/sec-role.routes');
 const docRouter = require('./routes/doc-officegen');
 
 app.use(cors());
@@ -38,6 +40,8 @@ app.use('/department', departmentRouter);
 app.use('/lector', lectorRouter);
 app.use('/sec', secRouter);
 app.use('/year', yearsOfStudyRouter);
+app.use('/sec_user', secUserRouter);
+app.use('/sec_role', secRoleRouter);
 app.use('/doc', docRouter);
 
 //
@@ -460,7 +464,8 @@ app.get('/user-info/:role', verify, async (req, res) => {
     } else if (role == "admin") {
       res.json(null);
     } else if (role == "secretary") {
-      res.json(null);
+      const userInfo = await pool.query('SELECT * FROM users WHERE user_id = $1', [req.user.id]);
+      res.json(userInfo.rows[0]);
     } else if (role == "lector") {
       const userInfo = await pool.query('SELECT * FROM lectors WHERE user_id = $1', [req.user.id]);
       res.json(userInfo.rows[0]);
@@ -893,15 +898,15 @@ app.post('/sec-user', verify, async (req, res) => {
   }
 })
 
-app.get('/sec-users/:id', verify, async (req, res) => {
-  try {
-    const id = req.params.id;
-    const sec = await pool.query(`SELECT * FROM sec_user INNER JOIN sec_role ON sec_user.id_sec_role = sec_role.id_sec_role WHERE sec_user.id_sec = $1`,[id])
-    res.json(sec.rows)
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+// app.get('/sec-users/:id', verify, async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const sec = await pool.query(`SELECT * FROM sec_user INNER JOIN sec_role ON sec_user.id_sec_role = sec_role.id_sec_role WHERE sec_user.id_sec = $1`,[id])
+//     res.json(sec.rows)
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// })
 
 app.delete('/sec-user/:id', verify, async (req, res) => {
   try {
