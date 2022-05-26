@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgOption } from '@ng-select/ng-select';
 import {SecretaryService} from '../../../../services/secretary/secretary.service';
-import {
-  FormGroup,
-  FormControl,
-  Validators
-} from '@angular/forms';
 import {NgbDate,NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {RoleService} from "../../../../services/role.service";
@@ -16,6 +11,9 @@ import {AuthService} from "../../../../services/auth/auth.service";
 import {Router} from "@angular/router";
 import {SecUserService} from "../../../../services/sec-structure/sec-user/sec-user.service";
 import {DepartmentService} from "../../../../services/university-structure/department/department.service";
+import {SecSpecialtyService} from "../../../../services/sec-structure/sec-specialty/sec-specialty.service";
+import {SecGroupService} from "../../../../services/sec-structure/sec-group/sec-group.service";
+import {StudentService} from "../../../../services/student/student.service";
 
 @Component({
   selector: 'app-secretary-cabinet',
@@ -37,6 +35,15 @@ export class SecretaryCabinetComponent implements OnInit {
 
   secCathedraColumn: string[] = ['cathedra', 'faculty', 'action'];
   secCathedra: any = [];
+
+  secSpecialtyColumn: string[] = ['specialty', 'specialtyFullName', 'code', 'action'];
+  secSpecialties: any = [];
+
+  secGroupColumn: string[] = ['groupName', 'specialty', 'action'];
+  secGroups: any = [];
+
+  secStudentColumn: string[] = ['studentName', 'groupName', 'action'];
+  secStudents: any = [];
 
   stud:any;
 
@@ -83,7 +90,10 @@ export class SecretaryCabinetComponent implements OnInit {
               private authService: AuthService,
               private router: Router,
               private secUserService:SecUserService,
-              private departmentService:DepartmentService) {
+              private departmentService:DepartmentService,
+              private secSpecialtyService:SecSpecialtyService,
+              private secGroupService:SecGroupService,
+              private studentService:StudentService) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
@@ -95,6 +105,46 @@ export class SecretaryCabinetComponent implements OnInit {
     this.getSecRoles()
 
     this.secTableData();
+  }
+
+  putCathedra(id) {
+    this.secService.updateCathedraId(id, this.editedSecId).
+    subscribe((response: any) => {
+      for(let spec of this.secSpecialties){
+        this.deleteSecSpecialty(spec.specialty_id)
+      }
+      this.secCathedraTableData();
+
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  secStudentTableData() {
+    this.studentService.getAllBySecId(this.editedSecId).
+    subscribe((response: any) => {
+      this.secStudents = new MatTableDataSource(response);
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  secGroupTableData() {
+    this.secGroupService.getAllBySecId(this.editedSecId).
+    subscribe((response: any) => {
+      this.secGroups = new MatTableDataSource(response);
+    }, (error: any)=>{
+      console.log(error);
+    });
+  }
+
+  secSpecialtyTableData() {
+    this.secSpecialtyService.getAllBySecId(this.editedSecId).
+    subscribe((response: any) => {
+      this.secSpecialties = new MatTableDataSource(response);
+    }, (error: any)=>{
+      console.log(error);
+    });
   }
 
   secCathedraTableData() {
@@ -246,13 +296,13 @@ export class SecretaryCabinetComponent implements OnInit {
   }
 
 
-  async putCathedra(id){
-    await this.secretary.putSecCathedra(id, this.editedSecId);
-    for(let spec of this.secSpecialty){
-      this.deleteSecSpecialty(spec.specialty_id)
-    }
-    this.getSecCathedra()
-  }
+  // async putCathedra(id){
+  //   await this.secretary.putSecCathedra(id, this.editedSecId);
+  //   for(let spec of this.secSpecialties){
+  //     this.deleteSecSpecialty(spec.specialty_id)
+  //   }
+  //   this.getSecCathedra()
+  // }
 
   async getSecCathedra(){
     this.secCathedra = await this.secretary.getSecCathedra(this.editedSecId);
@@ -293,16 +343,33 @@ export class SecretaryCabinetComponent implements OnInit {
 
   }
 
-  async deleteSecSpecialty(specId){
-    await this.secretary.deleteSecSpecialty(this.editedSecId,specId);  // удалять группы из sec_group и удалять юзеров из student_marks
-    for await(let group of this.secGroup){
-      if(group.fk_specialty == specId){
-        console.log('Delete Group by Id',group.group_id)
-        this.deleteSecGroup(group.group_id)
+  // async deleteSecSpecialty(specId){
+  //   await this.secretary.deleteSecSpecialty(this.editedSecId,specId);  // удалять группы из sec_group и удалять юзеров из student_marks
+  //   for await(let group of this.secGroups){
+  //     if(group.fk_specialty == specId){
+  //       console.log('Delete Group by Id',group.group_id)
+  //       this.deleteSecGroup(group.group_id)
+  //     }
+  //   }
+  //   this.getSecSpecialty()
+  // }
+
+  deleteSecSpecialty(id) {
+    this.secSpecialtyService.delete(this.editedSecId, id).
+    subscribe((response: any) => {
+      for (let group of this.secGroups) {
+        if (group.fk_specialty == id) {
+          console.log('Delete Group by Id',group.group_id)
+          this.deleteSecGroup(group.group_id)
+        }
       }
-    }
-    this.getSecSpecialty()
+      this.secSpecialtyTableData();
+    }, (error: any)=>{
+      console.log(error);
+    });
   }
+
+
 
   async getGroup(specId){
     const result = await this.secretary.getGroup(specId);
@@ -328,7 +395,8 @@ export class SecretaryCabinetComponent implements OnInit {
 
   async addPercent(name,percentPlane,comment){
     console.log(this.selectedStudents)
-    await this.secretary.putSecPercent(name,percentPlane,comment, Object.values(this.model).join('-'),Object.values(this.toDate).join('-'), this.editedSecId, this.secGroup.group_id,this.selectedStudents);
+    await this.secretary.putSecPercent(name,percentPlane,comment, Object.values(this.model).join('-'),
+      Object.values(this.toDate).join('-'), this.editedSecId, this.secGroup.group_id,this.selectedStudents);
     await this.getSecPercent()
   }
 
@@ -359,7 +427,8 @@ export class SecretaryCabinetComponent implements OnInit {
     console.log('Start',this.timeStart, this.timeEnd)
     const startTime = `${this.timeStart.hour}:${this.timeStart.minute}`;
     const endTime = `${this.timeEnd.hour}:${this.timeEnd.minute}`
-    await this.secretary.putSecEvent(address,this.selectedGroup.group_name, Object.values(this.model).join('-'),`${startTime} / ${endTime}`, this.editedSecId, this.selectedStudents);
+    await this.secretary.putSecEvent(address,this.selectedGroup.group_name, Object.values(this.model).join('-'),`${startTime} / ${endTime}`,
+      this.editedSecId, this.selectedStudents);
     await this.getSecEvent()
   }
 
@@ -423,8 +492,8 @@ export class SecretaryCabinetComponent implements OnInit {
 
   async getStudents(){
     this.students = []
-    console.log(this.secGroup)
-    for await(let group of this.secGroup){
+    console.log(this.secGroups)
+    for await(let group of this.secGroups){
       const result = await this.secretary.getStudents(group.group_id);
       this.students.push(result)
     }

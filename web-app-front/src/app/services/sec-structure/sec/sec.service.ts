@@ -34,6 +34,10 @@ export class SecService {
   getAllByUserId(id): Observable<any> {
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
     return this.http.get(`${baseUrl}/by_user/${id}`, {headers: token})
+  }
 
+  updateCathedraId(cathedraId, secId): Observable<any> {
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    return this.http.put(`${baseUrl}`, [cathedraId, secId], {headers: token});
   }
 }

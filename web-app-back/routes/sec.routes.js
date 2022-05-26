@@ -9,6 +9,7 @@ const DELETE_SEC = `DELETE FROM sec WHERE sec_id = $1`;
 const CREATE_SEC = `INSERT INTO sec (sec_number, sec_start_date, sec_end_date, year_id) VALUES($1, $2, $3, $4)`;
 const SEC_BY_ID = `SELECT * FROM sec JOIN years_of_study y ON sec.year_id = y.year_id WHERE sec_id = $1`;
 const ALL_SEC_BY_USER_ID = `SELECT * FROM sec JOIN sec_user su ON su.id_sec = sec.sec_id WHERE su.id_user = $1`;
+const UPDATE_CATHEDRA = `UPDATE sec SET fk_cathedra = $1 WHERE sec_id = $2`;
 
 router.get('/', verify, async (req, res) => {
     try {
@@ -71,6 +72,16 @@ router.get('/by_user/:id', verify, async (req, res) => {
         const sec = await pool.query(ALL_SEC_BY_USER_ID ,[id])
         res.json(sec.rows)
         console.log(sec)
+    } catch (error) {
+        console.log(error.message)
+    }
+})
+
+router.put('/', verify, async (req, res) => {
+    try {
+        const {cathedraId,secId} = req.body;
+        const sec = await pool.query(UPDATE_CATHEDRA, [cathedraId,secId])
+        res.json(sec.rows)
     } catch (error) {
         console.log(error.message)
     }

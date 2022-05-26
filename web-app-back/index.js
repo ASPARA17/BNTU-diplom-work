@@ -24,6 +24,9 @@ const secRouter = require('./routes/sec.routes');
 const yearsOfStudyRouter = require('./routes/years-of-study.routes');
 const secUserRouter = require('./routes/sec-user.routes')
 const secRoleRouter = require('./routes/sec-role.routes');
+const secSpecialtyRouter = require('./routes/sec-specialty.routes');
+const secGroupRouter = require('./routes/sec-group.routes');
+const percentageRouter = require('./routes/percentage.routes');
 const docRouter = require('./routes/doc-officegen');
 
 app.use(cors());
@@ -33,7 +36,7 @@ app.use('/groups', groupRouter);
 app.use('/diplom-work', diplomaRouter);
 app.use('/user', userRouter);
 app.use('/api/roles', roleRouter);
-//app.use('/student', studentRouter);
+app.use('/student', studentRouter);
 app.use('/specialty', specialtyRouter);
 app.use('/university', universityRouter);
 app.use('/department', departmentRouter);
@@ -42,6 +45,9 @@ app.use('/sec', secRouter);
 app.use('/year', yearsOfStudyRouter);
 app.use('/sec_user', secUserRouter);
 app.use('/sec_role', secRoleRouter);
+app.use('/sec_specialty', secSpecialtyRouter);
+app.use('/sec_group', secGroupRouter);
+app.use('/percentage', percentageRouter);
 app.use('/doc', docRouter);
 
 //
@@ -670,15 +676,15 @@ app.get('/sec-cathedra', verify, async (req, res) => {
   }
 })
 
-app.put('/sec-cathedra', verify, async (req, res) => {
-  try {
-    const {cathedraId,secId} = req.body;
-    const sec = await pool.query('UPDATE sec SET fk_cathedra = $1 WHERE sec_id = $2 ',[cathedraId,secId])
-    res.json(sec.rows)
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+// app.put('/sec-cathedra', verify, async (req, res) => {
+//   try {
+//     const {cathedraId,secId} = req.body;
+//     const sec = await pool.query('UPDATE sec SET fk_cathedra = $1 WHERE sec_id = $2 ',[cathedraId,secId])
+//     res.json(sec.rows)
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// })
 
 // app.get('/sec-cathedra/:id', verify, async (req, res) => {
 //   try {
@@ -732,15 +738,15 @@ app.get('/sec-specialty/:id', async (req, res) => {
   }
 })
 
-app.put('/sec-specialty', verify, async (req, res) => {
-  try {
-    const {secId,id} = req.body;
-    const sec = await pool.query('DELETE FROM sec_specialty WHERE sec_id = $1 AND specialty_id = $2',[secId,id])
-    res.json(sec.rows)
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+// app.put('/sec-specialty', verify, async (req, res) => {
+//   try {
+//     const {secId,id} = req.body;
+//     const sec = await pool.query('DELETE FROM sec_specialty WHERE sec_id = $1 AND specialty_id = $2',[secId,id])
+//     res.json(sec.rows)
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// })
 
 app.get('/sec-groups/:id', verify, async (req, res) => {
   try {
