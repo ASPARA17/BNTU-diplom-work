@@ -34,4 +34,10 @@ export class DepartmentService {
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
     return this.http.delete(`${baseUrl}/${id}`, {headers: token});
   }
+
+  getAllBySecId(id): Observable<any> {
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    return this.http.get(`${baseUrl}/sec/${id}`, {headers: token})
+  }
+
 }

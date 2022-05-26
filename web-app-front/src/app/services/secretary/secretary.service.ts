@@ -16,6 +16,14 @@ export class SecretaryService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
+  async getStud(){
+    const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
+    const data = await this.http.get('http://localhost:5000/stud', {
+      headers: token
+    }).toPromise();
+    return data
+  }
+
   async getYears(){
     const token = new HttpHeaders().set('auth-token', localStorage.getItem('token'));
     const data = await this.http.get('http://localhost:5000/date', {

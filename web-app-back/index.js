@@ -52,6 +52,16 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to my application." });
 });
 
+app.get('/stud', verify, async (req, res) => {
+  try {
+    const sec = await pool.query('select * from students join users on users.user_id = students.user_id')
+    res.json(sec.rows)
+  } catch (error) {
+    console.log(error.message)
+  }
+})
+
+
 
 // GROUPS
 const GROUPS_AND_SPECIALTY_BY_CATHEDRA = `SELECT group_id, group_name, specialty_name FROM groups JOIN specialty 
@@ -670,16 +680,16 @@ app.put('/sec-cathedra', verify, async (req, res) => {
   }
 })
 
-app.get('/sec-cathedra/:id', verify, async (req, res) => {
-  try {
-    const id = req.params.id;
-    const sec = await pool.query('SELECT * FROM cathedra NATURAL INNER JOIN faculty NATURAL INNER JOIN sec WHERE fk_cathedra = cathedra_id AND sec_id = $1',[id])
-    
-    res.json(sec.rows[0])
-  } catch (error) {
-    console.log(error.message)
-  }
-})
+// app.get('/sec-cathedra/:id', verify, async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const sec = await pool.query('SELECT * FROM cathedra NATURAL INNER JOIN faculty NATURAL INNER JOIN sec WHERE fk_cathedra = cathedra_id AND sec_id = $1',[id])
+//
+//     res.json(sec.rows[0])
+//   } catch (error) {
+//     console.log(error.message)
+//   }
+// })
 
 app.put('/sec-cathedra/:id', verify, async (req, res) => {
   try {
@@ -712,7 +722,7 @@ app.post('/sec-specialty', verify, async (req, res) => {
   }
 })
 
-app.get('/sec-specialty/:id', verify, async (req, res) => {
+app.get('/sec-specialty/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const sec = await pool.query('SELECT * FROM sec_specialty NATURAL INNER JOIN specialty WHERE sec_id = $1 ',[id])
