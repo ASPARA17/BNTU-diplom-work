@@ -1,0 +1,44 @@
+
+<div mat-dialog-content>
+<!--  <mat-form-field>-->
+<!--    <input placeholder="Специальность" matInput [(ngModel)]="local_data.specialty">-->
+<!--  </mat-form-field>-->
+  <mat-form-field appearance="fill">
+    <mat-select>
+      <mat-option *ngFor="let specialty of local_data.specialtyList" [value]="specialty.specialty_id">
+        {{specialty.specialty_name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input placeholder="Группа" matInput [(ngModel)]="local_data.group_name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="doAction()">Update</button>
+  <button mat-button (click)="closeDialog()" mat-flat-button color="warn">Cancel</button>
+</div>
+
+
+<mat-form-field appearance="fill">
+  <mat-select>
+<!--    <mat-option *ngFor="let specialty of local_data.specialtyList" [value]="specialty.specialty_id">-->
+<!--      {{specialty.specialty_name}}-->
+<!--    </mat-option>-->
+    <mat-option>None</mat-option>
+    <ng-container *ngFor="let specialty of local_data.specialtyList">
+      <mat-option value="{{specialty.specialty_id}}">{{specialty.specialty_name}}</mat-option>
+    </ng-container>
+  </mat-select>
+</mat-form-field>
+
+<!--                  <label for="specialty">Выберите специальность</label>-->
+<!--                  <ng-select-->
+<!--                              [(ngModel)]="specialtyId"-->
+<!--                              [selected] = ""-->
+<!--                              [items] = "specialtyList"-->
+<!--                              bindLabel="specialty_name"-->
+<!--                              bindValue="specialty_id"-->
+<!--                              name="specialty"-->
+<!--                              placeholder="Специальность">-->
+<!--                  </ng-select>-->

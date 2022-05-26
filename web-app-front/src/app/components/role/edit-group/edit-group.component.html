@@ -1,0 +1,29 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span class="title-center">{{dialogData.action}} Group</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="groupForm">
+    <div fxFlex fxLayout="column">
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Группа</mat-label>
+          <input matInput formControlName="group_name">
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex>
+          <mat-label>Специальность</mat-label>
+          <mat-select formControlName="fk_specialty">
+            <mat-option *ngFor="let specialty of specialties" [value]="specialty.specialty_id">{{specialty.specialty_name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-content align="center">
+  <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()">{{action}}</button>
+  <button  mat-raised-button color="primary" mat-dialog-close>Close</button>
+</mat-dialog-content>
