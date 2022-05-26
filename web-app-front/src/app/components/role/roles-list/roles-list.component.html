@@ -1,0 +1,193 @@
+<mat-card>
+  <button mat-flat-button color="primary" class="float-right" (click)="handleAddAction()">Добавить</button>
+</mat-card>
+<hr>
+<div class="responive-table">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="specialty_name">
+      <th mat-header-cell *matHeaderCellDef>Специальность</th>
+      <td mat-cell *matCellDef="let element">{{element.specialty_name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="groupName">
+      <th mat-header-cell *matHeaderCellDef>Группа</th>
+      <td mat-cell *matCellDef="let element">{{element.group_name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Действия</th>
+      <td mat-cell *matCellDef="let element" class="mat-action-list">
+        <button mat-icon-button color="primary" matTooltip="Edit" (click)="handleEditAction(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
+
+
+<mat-form-field>
+  <mat-label>Message</mat-label>
+  <input matInput value="Disco party!" #message>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Action</mat-label>
+  <input matInput value="Dance" #action>
+</mat-form-field>
+
+<button mat-stroked-button (click)="openSnackBar(message.value, action.value)">Show snack-bar</button>
+
+
+
+      <mat-form-field appearance="fill">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date">
+          <input matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+
+
+
+
+
+
+<!--        <table class="table table-bordered table-responsive-md table-striped text-center" id="example" style="padding: 0.3rem">-->
+<!--          <thead>-->
+<!--            <tr>-->
+<!--              <th scope="col">Специальность</th>-->
+<!--              <th scope="col">Группа</th>-->
+<!--              <th scope="col">Дейсвтия</th>-->
+<!--            </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--            <tr *ngFor="let group of groupsList" class="users__user user">-->
+<!--              <td style="padding: 0.3rem"> {{group.specialty_name}}</td>-->
+<!--              <td style="padding: 0.3rem"> {{group.group_name}}</td>-->
+<!--              <td style="padding: 0.3rem">-->
+<!--                <div>-->
+<!--                  <button class="me-2 btn btn-lg text-dark edit-button">-->
+<!--                    <i class="icon-pencil" (click)="editDialog(group)"></i>-->
+<!--                  </button>-->
+<!--                  <button class="btn btn-lg text-dark delete-button">-->
+<!--                    <i class="icon-trash" (click)="onEdit(group)"></i>-->
+<!--                  </button>-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+
+
+<!--&lt;!&ndash;        <input name="universityId" #universityId="ngModel" [(ngModel)]="university.university_id" class="form-control">&ndash;&gt;-->
+
+
+<!--        <table class="table table-bordered table-responsive-md table-striped text-center" id="example" style="padding: 0.3rem">-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th scope="col">Специальность</th>-->
+<!--            <th scope="col">Группа</th>-->
+<!--            <th scope="col">Дейсвтия</th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--          <tr *ngFor="let university of universityList" class="users__user user">-->
+<!--            <td style="padding: 0.3rem"> {{university.university_id}}</td>-->
+<!--            <td style="padding: 0.3rem"> {{university.university_name}}</td>-->
+<!--            <td style="padding: 0.3rem"> {{university.university_name_full  }}</td>-->
+<!--          </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+
+
+<!--        <h4>Basic mat-select</h4>-->
+<!--        <mat-form-field appearance="fill">-->
+<!--          <mat-label>Favorite food</mat-label>-->
+<!--          <mat-select>-->
+<!--            <mat-option *ngFor="let specialty of specialtyList" [value]="specialty.specialty_id">-->
+<!--              {{specialty.specialty_name}}-->
+<!--            </mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--        <select name="hall" id="hall">-->
+<!--          <option selected> 1 </option>-->
+<!--          <option> 2 </option>-->
+<!--          <option > 3 </option>-->
+<!--          <option> 4 </option>-->
+<!--          <option> 5 </option>-->
+<!--        </select>-->
+
+
+<!--        <label for="specialty">Выберите специальность</label>-->
+<!--                  <ng-select-->
+<!--                              [(ngModel)]="specialtyId"-->
+<!--                              [items] = "specialtyList"-->
+<!--                              bindLabel="specialty_name"-->
+<!--                              bindValue="specialty_id"-->
+<!--                              name="specialty"-->
+<!--                              placeholder="Специальность">-->
+<!--                  </ng-select>-->
+
+
+
+<!--&lt;!&ndash; app.component.html &ndash;&gt;-->
+<!--<div class="container text-center">-->
+
+
+<!--  <table mat-table [dataSource]="groupsList" #mytable class="my-table mat-elevation-z8">-->
+
+<!--    &lt;!&ndash;- Note that these columns can be defined in any order.-->
+<!--        The actual rendered columns are set as a property on the row definition" &ndash;&gt;-->
+
+<!--    &lt;!&ndash; Id Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="specialty">-->
+<!--      <th mat-header-cell *matHeaderCellDef> Специальность </th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.specialty.specialty_name}} </td>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="groupName">-->
+<!--      <th mat-header-cell *matHeaderCellDef> Группа </th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element.group_name}} </td>-->
+<!--    </ng-container>-->
+
+<!--    &lt;!&ndash; Action Column &ndash;&gt;-->
+<!--    <ng-container matColumnDef="action">-->
+<!--      <th mat-header-cell *matHeaderCellDef> Action </th>-->
+<!--      <td mat-cell *matCellDef="let element" class="action-link">-->
+<!--        <a (click)="editDialog(element)">Edit</a> |-->
+<!--        <a>Delete</a>-->
+<!--      </td>-->
+<!--    </ng-container>-->
+
+<!--    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+<!--  </table>-->
+
+<!--</div>-->
+
+
+<!--<ol>-->
+<!--  <li>-->
+<!--    <mat-form-field>-->
+<!--      <mat-label>What's your name?</mat-label>-->
+<!--      <input matInput [(ngModel)]="name">-->
+<!--    </mat-form-field>-->
+<!--  </li>-->
+<!--  <li>-->
+<!--    <button mat-raised-button (click)="openDialog()">Pick one</button>-->
+<!--  </li>-->
+<!--  <li *ngIf="animal">-->
+<!--    You chose: <i>{{animal}}</i>-->
+<!--  </li>-->
+<!--</ol>-->
+
+

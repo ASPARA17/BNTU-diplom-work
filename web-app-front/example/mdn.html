@@ -1,0 +1,819 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
+<link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/standard/modules/b4bca5d779777cff9d5c51553952a0a1.min.css">
+
+
+<link rel='stylesheet' id='roboto-subset.css-css'  href='https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/mdb5/fonts/roboto-subset.css?ver=3.9.0-update.5' type='text/css' media='all' />
+
+
+<meta charset="utf-8">
+<title>Bootstrap Table editor - examples &amp; tutorial</title>
+
+
+
+<link rel="shortcut icon" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/favicon.ico" />
+
+
+<script data-cfasync="false">
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.'+'js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-W7MBMN');
+</script>
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "MDBootstrap",
+      "item": "https://mdbootstrap.com/",
+      "image": "https://mdbcdn.b-cdn.net/img/Marketing/mdb-press-pack/mdb-main.webp"
+    }, {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Standard",
+      "item": "https://mdbootstrap.com/docs/standard/",
+      "image": "https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/about/assets/mdb5-about.webp"
+    }, {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Table editor",
+      "item": "https://mdbootstrap.com/docs/standard/plugins/table-editor/",
+      "image": ""
+    }]
+  }
+</script>
+
+<style>
+  #navbarNotification::after {
+    content: none !important;
+  }
+
+
+  #main-navbar .badge {
+    position: absolute;
+    font-size: .6rem;
+    margin-top: -.1rem;
+    margin-left: -.5rem;
+    padding: .2em .45em;
+  }
+
+
+  #main-navbar .nav-link {
+    color: rgba(0, 0, 0, .55) !important;
+    font-size: 1rem !important;
+    font-weight: 400;
+  }
+
+  #main-navbar .nav-link :hover {
+    color: rgb(76, 76, 76);
+  }
+
+
+
+  [aria-labelledby=new-mdb-technologies-dropdown] li {
+    background-color: rgb(255, 255, 255) !important;
+  }
+
+  [aria-labelledby=new-mdb-technologies-dropdown] li :hover {
+    background-color: #EEEEEE !important;
+    box-shadow: none !important;
+  }
+
+  [aria-labelledby=userDropdown] a {
+    background-color: rgb(255, 255, 255) !important;
+    box-shadow: none !important;
+  }
+
+  [aria-labelledby=userDropdown] a:hover {
+    background-color: #EEEEEE !important;
+  }
+
+  #navbarNotificationContent a {
+    background-color: rgb(255, 255, 255) !important;
+    box-shadow: none !important;
+  }
+
+  #navbarNotificationContent a:hover {
+    background-color: #EEEEEE !important;
+  }
+</style>
+<style>
+  .docs-pills {
+    border-radius: 0.5rem;
+  }
+
+  .docs-pills pre[class*="language-"] {
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
+
+  .docs-pills .btn-copy-code,
+  .docs-tab-content .export-to-snippet {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    box-shadow: none !important;
+    color: #616161 !important;
+    background-color: transparent !important;
+    padding: 6px 15px !important;
+  }
+</style>
+<style>
+  @media (max-width: 576px) {
+    [id^=dpl-], [class^=dpl-], .mobile-hidden {
+      display: none!important;
+    }
+  }
+</style>
+
+
+<body class="mdb-skin-custom " data-mdb-spy="scroll" data-mdb-target="#scrollspy" data-mdb-offset="250">
+
+
+<link rel="stylesheet" href="table.css">
+
+<section id="section-basic-example">
+  <!-- Section title -->
+  <h2 class="mb-4">Basic example</h2>
+
+  <!--Section: Demo-->
+  <section class="pb-4">
+    <div class="bg-white border rounded-5">
+
+      <section class="py-4 px-2">
+        <div class="d-flex justify-content-end mb-4">
+          <div class="form-outline">
+            <input
+              data-mdb-search
+              data-mdb-target="#table_1"
+              type="text"
+              id="search_table_1"
+              class="form-control"
+            />
+            <label class="form-label" for="search_table_1">Search</label>
+          </div>
+          <button class="btn btn-primary btn-sm ms-3" data-mdb-add-entry data-mdb-target="#table_1">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <hr />
+        <div
+          class="table-editor"
+          id="table_1"
+          data-mdb-entries="5"
+          data-mdb-entries-options="[5, 10, 15]"
+        >
+          <table>
+            <thead>
+            <tr>
+              <th class="th-sm" data-mdb-width="250">Company</th>
+              <th class="th-sm" data-mdb-width="250" data-mdb-sort="false">Address</th>
+              <th class="th-sm" data-mdb-width="250" data-mdb-sort="false">Employees</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Smith & Johnson</td>
+              <td>Park Lane 2, London</td>
+              <td>30</td>
+            </tr>
+            <tr>
+              <td>P.J. Company</td>
+              <td>Oak Street 7, Aberdeen</td>
+              <td>80</td>
+            </tr>
+            <tr>
+              <td>Food & Wine</td>
+              <td>Netherhall Gardens 3, Hampstead</td>
+              <td>12</td>
+            </tr>
+            <tr>
+              <td>IT Service</td>
+              <td>Warwick Road 14, London</td>
+              <td>17</td>
+            </tr>
+            <tr>
+              <td>A. Jonson Gallery</td>
+              <td>Oaklands Avenue 2, London</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td>F.A. Architects</td>
+              <td>Frognal Way 7, Hampstead</td>
+              <td>4</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+    </div>
+  </section>
+</section>
+
+
+  <script>
+
+    const supportedLanguages = {
+      en: {
+        flag: 'united kingdom',
+        name: 'English'
+      },
+      cn: {
+        flag: 'china',
+        name: '中文'
+      }
+    };
+
+    function getSiteLanguage() {
+      const [, language ] = location.pathname.split('/');
+      switch (language) {
+        case 'cn': return 'cn';
+        case 'es': return 'cn';
+        default: return 'en';
+      }
+    }
+
+    function getCurrentTechnology(url) {
+      const currentUrl = url || location.pathname;
+      switch (true) {
+        case (currentUrl.indexOf('/docs/standard') === 0): return 'standard';
+        case (currentUrl.indexOf('/docs/b5/angular') === 0): return 'b5-angular';
+        case (currentUrl.indexOf('/docs/b5/react') === 0): return 'b5-react';
+        case (currentUrl.indexOf('/docs/b5/vue') === 0): return 'b5-vue';
+        case (currentUrl.indexOf('/docs/b4/jquery') === 0): return 'jquery';
+        case (currentUrl.indexOf('/docs/angular') === 0): return 'angular';
+        case (currentUrl.indexOf('/docs/react') === 0): return 'react';
+        case (currentUrl.indexOf('/docs/vue') === 0): return 'vue';
+      }
+    }
+
+    function getCookie(name) {
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookies = decodedCookie.split(';');
+
+      for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        while (cookie.charAt(0) === ' ') {
+          cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(name) === 0) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+
+      return null;
+    }
+  </script>
+
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', (e) => {
+
+      function checkSidenavActiveLinks() {
+
+        document.querySelectorAll('.sidenav-menu li').forEach((menu)=>{
+
+          var collapse = document.querySelectorAll('ul.sidenav-collapse li').forEach((link)=>{
+            var is_active = link.querySelector('a.sidenav-link').classList.contains('active');
+            var collapseIcon = menu.querySelector('.rotate-icon');
+
+            if (is_active && collapseIcon) {
+              link.classList.add('show');
+              return false;
+            }
+          });
+        });
+      }
+
+
+      checkSidenavActiveLinks();
+
+      const setTransitionProperties = () => {
+        const sidenav = document.getElementById('mdb-sidenav');
+        const rotateIcons = sidenav.querySelectorAll('.rotate-icon');
+        const collapse = sidenav.querySelectorAll('.sidenav-collapse');
+
+        rotateIcons.forEach(icon => {
+          icon.style.transitionProperty = 'transform'
+        });
+
+        collapse.forEach(collapse => {
+          collapse.style.transitionProperty = 'height'
+        });
+      }
+
+
+      setTimeout(setTransitionProperties, 1);
+    });
+  </script>
+
+<!--<script type="text/javascript" src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/js/dist/mdb5/standard/modules/b4bca5d779777cff9d5c51553952a0a1.min.js"></script>-->
+  <script type="text/javascript" src="scriptsEx/script1.js"></script>
+
+<script type="text/javascript" src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/js/dist/search/search.min.js"></script>
+
+  <script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/js/dist/main.min.js"></script>
+
+
+<script>
+  let isSidenavHidden = false;
+  isSidenavHidden =  false ;
+  const sidenav = document.getElementById('mdb-sidenav');
+  const instance = mdb.Sidenav.getInstance(sidenav);
+
+
+  let innerWidth = null;
+
+  const setMode = () => {
+    if (window.innerWidth === innerWidth) return;
+
+    innerWidth = window.innerWidth;
+    const isFrontPage = 0;
+
+    if (innerWidth <= 1440 || isFrontPage || isSidenavHidden) {
+      instance.changeMode('over');
+      instance.hide();
+      return;
+    }
+    instance.changeMode('side');
+    instance.show();
+  };
+
+  if( sidenav ) {
+    window.addEventListener('resize', setMode);
+    setMode();
+  }
+
+
+
+  function mdbScrollSpyTo(e) {
+    e.preventDefault();
+    const hash = e.target.getAttribute('href');
+    const target = document.getElementById(hash.substring(1));
+
+    window.scroll({
+      top: target.offsetTop - 100,
+      behavior: 'smooth'
+    });
+
+    if (history.pushState) {
+      history.pushState(null, null, hash);
+    } else {
+      location.hash = hash;
+    }
+  }
+
+  document.querySelectorAll('#scrollspy .menu-sidebar a').forEach((link) => {
+    link.addEventListener('click', mdbScrollSpyTo, false);
+  });
+
+
+  if (window.location.hash) {
+    const target = document.getElementById(window.location.hash.substring(1));
+
+    setTimeout(function() {
+      window.scroll({
+        top: 0
+      });
+
+      setTimeout(() => {
+        window.scroll({
+          top: target.offsetTop - 100,
+          behavior: 'smooth'
+        });
+      }, 1000);
+    }, 1);
+  }
+
+
+
+
+  window.addEventListener("load", (event) => {
+    const locationHash = window.location.hash;
+    const scrollTop = () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    if (locationHash === "#docsTabsAPI") {
+      const apiTab = document.querySelector('#docs-nav-pills a[href="#docsTabsAPI"]');
+
+      if (apiTab) {
+        const apiTabsInstance = new mdb.Tab(apiTab);
+
+        apiTabsInstance.show();
+        scrollTop();
+      }
+    } else if (locationHash === "#docsTabsOverview") {
+      scrollTop();
+    } else if (["#topTemplates", "#newTemplates", "#trendingTemplates"].indexOf(locationHash) !== -1) {
+      const templateTab = document.querySelector('#templates-nav-pills a[href="' + locationHash + '"]');
+
+      if (templateTab) {
+        const templateTabsInstance = new mdb.Tab(templateTab);
+
+        templateTabsInstance.show();
+        scrollTop();
+      }
+    }
+
+    const navPills = document.querySelectorAll('#docs-nav-pills a[data-mdb-toggle="tab"]');
+
+    if (navPills.length) {
+      navPills.forEach((el) => {
+        el.addEventListener('click', (e) => {
+          window.location.hash = e.target.hash;
+
+          scrollTop();
+        });
+      });
+    }
+
+    const templatePills = document.querySelectorAll('#templates-nav-pills a[data-mdb-toggle="pill"]');
+
+    if (templatePills.length) {
+      templatePills.forEach((el) => {
+        el.addEventListener('click', (e) => {
+          window.location.hash = e.target.hash;
+
+          scrollTop();
+        });
+      });
+    }
+  });
+</script>
+
+
+<script>
+  (function() {
+    const searchInput = document.getElementById('mdb-5-search-input');
+    const searchIcon = document.getElementById('mdb-5-search-icon');
+    const searchList = document.getElementById('mdb-5-search-list');
+    const searchForm = document.getElementById('mdb-5-search-container');
+    const searchDropdown = document.getElementById('mdb-5-search-dropdown');
+    const searchCount = document.getElementById('mdb-5-search-count');
+
+    let searchJsonFile = "https://mdbootstrap.com/wp-content/themes/mdbootstrap4/docs-app" + '/js/dist/search/';
+
+    switch ("standard") {
+      case 'b5-angular':
+        searchJsonFile += 'search-angular.json'
+        break;
+      case 'b5-react':
+        searchJsonFile += 'search-react.json'
+        break;
+      case 'b5-vue':
+        searchJsonFile += 'search-vue.json'
+        break;
+      default:
+        searchJsonFile += 'search.json'
+        break;
+    }
+
+    const search = new Search(searchInput, searchIcon, searchList, searchForm, searchDropdown, searchCount, searchJsonFile);
+
+    search.init();
+  })();
+</script>
+
+<script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/js/dist/mdb5/plugins/table-editor.min.js"></script>
+
+<script>
+const advancedColumns = [
+  {
+    width: 250,
+    label: 'Company',
+    field: 'company',
+  },
+  {
+    width: 250,
+    sort: false,
+    defaultValue: 'Warsaw',
+    options: ['London', 'Warsaw', 'New York'],
+    inputType: 'select',
+    label: 'Office',
+    field: 'office',
+  },
+  {
+    width: 250,
+    inputType: 'number',
+    defaultValue: 1,
+    label: 'Employees',
+    field: 'employees',
+  },
+  {
+    width: 100,
+    defaultValue: false,
+    inputType: 'checkbox',
+    label: 'International',
+    field: 'international',
+  },
+];
+
+const advancedRows = [
+  {
+    company: 'Smith & Johnson',
+    office: 'London',
+    employees: 30,
+    international: true,
+  },
+  {
+    company: 'P.J. Company',
+    office: 'London',
+    employees: 80,
+    international: false,
+  },
+  {
+    company: 'Food & Wine',
+    office: 'London',
+    employees: 12,
+    international: false,
+  },
+  {
+    company: 'IT Service',
+    office: 'London',
+    employees: 17,
+    international: false,
+  },
+  {
+    company: 'A. Jonson Gallery',
+    office: 'London',
+    employees: 4,
+    international: false,
+  },
+  {
+    company: 'F.A. Architects',
+    office: 'London',
+    employees: 4,
+    international: false,
+  },
+];
+
+const columns = [
+  {
+    width: 250,
+    label: 'Company',
+    field: 'company',
+  },
+  {
+    width: 250,
+    label: 'Address',
+    field: 'address',
+  },
+  {
+    width: 250,
+    label: 'City',
+    field: 'city',
+  },
+];
+
+const rows = [
+  ['Smith & Johnson', 'Park Lane 2', 'London'],
+  ['P.J. Company', 'Oak Street 7', 'Aberdeen'],
+  ['Food & Wine', 'Netherhall Gardens 3', 'Hampstead'],
+  ['IT Service', 'Warwick Road 14', 'London'],
+  ['A. Jonson Gallery', 'Oaklands Avenue 2', 'London'],
+  ['F.A. Architects', 'Frognal Way 7', 'Hampstead'],
+];
+
+(function () {
+  const tableDisableEdit = new TableEditor(
+    document.getElementById('table_inputs'),
+    { columns: advancedColumns, rows: advancedRows },
+    { entries: 5, entriesOptions: [5, 10, 15] }
+  );
+})();
+
+(function () {
+  const tableDisableEdit = new TableEditor(
+    document.getElementById('table_disable_edit'),
+    {
+      columns: advancedColumns.map((column) => {
+        return {
+          ...column,
+          editable: false,
+        };
+      }),
+      rows: advancedRows,
+    },
+    { entries: 5, entriesOptions: [5, 10, 15] }
+  );
+})();
+
+(function () {
+  const tableModal = new TableEditor(
+    document.getElementById('table_modal'),
+    {
+      columns: advancedColumns,
+      rows: advancedRows,
+    },
+    { mode: 'modal', entries: 5, entriesOptions: [5, 10, 15] }
+  );
+})();
+
+// Confirm delete
+
+(function () {
+  const tableConfirmDelete = new TableEditor(
+    document.getElementById('table_confirm_delete'),
+    {
+      columns: advancedColumns,
+      rows: advancedRows,
+    },
+    { entries: 5, entriesOptions: [5, 10, 15], confirm: true }
+  );
+})();
+
+// advanced search
+
+(function () {
+  const input = document.getElementById('search_advanced');
+  const select = document.getElementById('search_advanced_select');
+  const searchBtn = document.getElementById('search_advanced_btn');
+  const table = document.getElementById('table_advanced_search');
+
+  const search = () => {
+    tableAdvancedSearch.search(input.value, select.value);
+  };
+
+  const tableAdvancedSearch = new TableEditor(
+    table,
+    {
+      columns: advancedColumns,
+      rows: advancedRows,
+    },
+    { entries: 5, entriesOptions: [5, 10, 15] }
+  );
+
+  searchBtn.addEventListener('click', search);
+
+  const toggleSelectState = (disabled) => {
+    const selectInstance = mdb.Select.getInstance(select);
+    selectInstance.dispose();
+
+    if (disabled) {
+      select.setAttribute('data-mdb-disabled', true);
+    } else {
+      select.removeAttribute('data-mdb-disabled');
+    }
+
+    new mdb.Select(select);
+  };
+
+  table.addEventListener('edit.mdb.tableEditor', () => {
+    input.setAttribute('disabled', true);
+    searchBtn.setAttribute('disabled', true);
+
+    toggleSelectState(true);
+  });
+
+  table.addEventListener('exit.mdb.tableEditor', () => {
+    input.removeAttribute('disabled');
+    searchBtn.removeAttribute('disabled');
+
+    toggleSelectState(false);
+  });
+})();
+
+// async data
+
+(function () {
+  const table = document.getElementById('table_async_data');
+  const loadBtn = document.getElementById('async_data_btn');
+
+  const columns = [
+    { label: 'Company', field: 'company' },
+    { label: 'Email', field: 'email' },
+    { label: 'Name', field: 'name' },
+    { label: 'Phone', field: 'phone' },
+  ];
+
+  const asyncTable = new TableEditor(
+    table,
+    {
+      columns,
+    },
+    {
+      loading: true,
+    }
+  );
+
+  const loadData = () => {
+    asyncTable.update(null, { loading: true });
+
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((response) => response.json())
+      .then((data) => {
+        setTimeout(() => {
+          asyncTable.update(
+            {
+              rows: data.map((user) => ({
+                ...user,
+                address: `${user.address.city}, ${user.address.street}`,
+                company: user.company.name,
+              })),
+            },
+            { loading: false }
+          );
+        }, 2000);
+      });
+  };
+
+  loadBtn.addEventListener('click', loadData);
+
+  table.addEventListener('update.mdb.tableEditor', (e) => {
+    // here you can create a POST request to update your database
+    console.log(e.columns, e.rows);
+  });
+})();
+
+// custom rows
+
+(function () {
+  const table = document.getElementById('table_custom_rows');
+
+  const tableEditorInstance = new TableEditor(table, { rows, columns }, { pagination: false });
+
+  const buttons = document.getElementsByClassName('add-entry-button');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const company = e.target.getAttribute('data-mdb-company');
+      const address = e.target.getAttribute('data-mdb-address');
+      const city = e.target.getAttribute('data-mdb-city');
+
+      tableEditorInstance.add({ company, address, city });
+
+      e.target.setAttribute('disabled', true);
+      e.target.innerText = 'Loaded';
+    });
+  });
+
+  // disable buttons in edit mode
+
+  table.addEventListener('edit.mdb.tableEditor', () => {
+    buttons.forEach((button) => {
+      button.setAttribute('disabled', true);
+    });
+  });
+
+  table.addEventListener('exit.mdb.tableEditor', () => {
+    buttons.forEach((button) => {
+      if (button.innerText.toLowerCase() !== 'loaded') {
+        button.removeAttribute('disabled');
+      }
+    });
+  });
+})();
+
+// notifications
+
+(function () {
+  const table = document.getElementById('table_notifications');
+  new TableEditor(table, { rows: advancedRows, columns: advancedColumns });
+
+  table.addEventListener('add.mdb.tableEditor', (e) => {
+    const alert = document.getElementById('alert-add-entry');
+    const alertInstance = mdb.Alert.getInstance(alert);
+
+    const { company, office } = e.row;
+    alert.innerHTML = `<strong>New entry:</strong> ${company} (${office})`;
+
+    alertInstance.show();
+  });
+
+  table.addEventListener('delete.mdb.tableEditor', (e) => {
+    const alert = document.getElementById('alert-remove-entry');
+    const alertInstance = mdb.Alert.getInstance(alert);
+
+    const { company, office } = e.row;
+    alert.innerHTML = `<strong>Deleted entry:</strong> ${company} (${office})`;
+
+    alertInstance.show();
+  });
+
+  table.addEventListener('updateEntry.mdb.tableEditor', (e) => {
+    const alert = document.getElementById('alert-update-entry');
+    const alertInstance = mdb.Alert.getInstance(alert);
+
+    const { company, office } = e.row;
+    alert.innerHTML = `<strong>Updated entry:</strong> ${company} (${office})`;
+
+    alertInstance.show();
+  });
+})();
+</script>
+
+
